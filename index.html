@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Midasia — Supply Chain Intelligence Map · Sep 2026</title>
+<style>
+:root {
+  --bg:#090d18; --sf:#0f1628; --el:#162035; --bd:#1e2d47;
+  --tx:#dce8f5; --mt:#7a90b5; --mt2:#4a5f82;
+  --gn:#10b981; --am:#f59e0b; --rd:#ef4444;
+  --bl:#3b82f6; --pp:#8b5cf6; --or:#f97316; --cy:#06b6d4;
+  --rm:#c084fc;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; }
+body {
+  background:var(--bg); color:var(--tx);
+  font-family:'Inter','SF Pro Display',-apple-system,sans-serif;
+  display:flex; flex-direction:column; height:100vh;
+}
+
+/* HEADER */
+header {
+  padding:10px 24px; border-bottom:1px solid var(--bd);
+  display:flex; align-items:center; gap:14px; flex-shrink:0;
+  background:linear-gradient(90deg,#090d18,#0f1825,#090d18);
+}
+.brand-dot {
+  width:10px; height:10px; border-radius:50%; background:var(--or);
+  box-shadow:0 0 8px var(--or);
+}
+h1 { font-size:17px; font-weight:800; color:#f1f5f9; letter-spacing:-0.02em; }
+.header-meta { font-size:11px; color:var(--mt2); background:var(--el); border:1px solid var(--bd); padding:3px 10px; border-radius:20px; }
+.hstat { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--mt); }
+.hstat-val { font-weight:700; color:#f1f5f9; }
+.header-badges { display:flex; gap:5px; margin-left:auto; }
+.badge { font-size:10px; font-weight:600; padding:3px 9px; border-radius:20px; letter-spacing:0.05em; text-transform:uppercase; }
+.badge.eu  { background:#10b98120; color:#34d399; border:1px solid #10b98140; }
+.badge.ap  { background:#3b82f620; color:#60a5fa; border:1px solid #3b82f640; }
+.badge.rg  { background:#ef444420; color:#f87171; border:1px solid #ef444440; }
+.badge.gn  { background:#10b98120; color:#34d399; border:1px solid #10b98140; }
+
+/* LEGEND BAR */
+.legend {
+  padding:7px 24px; border-bottom:1px solid var(--bd);
+  display:flex; gap:16px; align-items:center; flex-shrink:0; background:var(--sf);
+}
+.lbl { font-size:9px; color:var(--mt2); font-weight:700; letter-spacing:0.1em; text-transform:uppercase; }
+.li { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--mt); }
+.ln { width:13px; height:13px; border-radius:50%; border:2px solid; }
+.ln.blu { background:#3b82f6; border-color:#60a5fa; }
+.ln.cyn { background:#06b6d4; border-color:#22d3ee; }
+.ln.prp { background:#8b5cf6; border-color:#a78bfa; }
+.ln.amb { background:#f59e0b; border-color:#fbbf24; }
+.ln.org { background:#f97316; border-color:#fb923c; }
+.ln.mat { background:#c084fc; border-color:#d8b4fe; }
+.ln.gry { background:#475569; border-color:#64748b; }
+.ln.grn { background:#10b981; border-color:#34d399; }
+.ln.red { background:#ef4444; border-color:#f87171; }
+.ln.ylw { background:#f59e0b; border-color:#fbbf24; }
+.lsep { width:1px; height:16px; background:var(--bd); }
+
+/* MAIN */
+.main { display:flex; flex:1; overflow:hidden; }
+
+/* CANVAS */
+.canvas-wrap { flex:1; overflow:hidden; position:relative; background:var(--bg); }
+#canvas { width:100%; height:100%; cursor:grab; }
+#canvas:active { cursor:grabbing; }
+.zoom-controls {
+  position:absolute; bottom:14px; right:14px;
+  display:flex; flex-direction:column; gap:4px;
+}
+.zoom-btn {
+  width:30px; height:30px; border-radius:7px;
+  background:var(--el); border:1px solid var(--bd);
+  color:var(--mt); font-size:16px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.15s;
+}
+.zoom-btn:hover { background:var(--bd); color:var(--tx); }
+
+/* DETAIL PANEL */
+.detail-panel {
+  width:360px; flex-shrink:0; border-left:1px solid var(--bd);
+  background:var(--sf); display:flex; flex-direction:column; overflow:hidden;
+  transition:width 0.3s ease;
+}
+.detail-panel.closed { width:0; border:none; }
+.panel-header {
+  padding:12px 16px; border-bottom:1px solid var(--bd);
+  display:flex; align-items:center; gap:8px;
+  background:var(--el); flex-shrink:0;
+}
+.pstage {
+  font-size:9px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
+  padding:2px 8px; border-radius:20px; flex-shrink:0;
+}
+.ptype {
+  font-size:9px; font-weight:700; padding:2px 7px; border-radius:20px; flex-shrink:0;
+}
+.ptype.player { background:#3b82f620; color:#60a5fa; border:1px solid #3b82f640; }
+.ptype.material { background:#c084fc20; color:#c084fc; border:1px solid #c084fc40; }
+.ptitle { font-size:14px; font-weight:700; color:#f1f5f9; flex:1; }
+.pclose {
+  background:none; border:none; color:var(--mt2); font-size:18px; cursor:pointer;
+  padding:2px 6px; border-radius:5px;
+}
+.pclose:hover { background:var(--bd); color:var(--tx); }
+.panel-body { flex:1; overflow-y:auto; padding:14px 16px; }
+.panel-body::-webkit-scrollbar { width:4px; }
+.panel-body::-webkit-scrollbar-thumb { background:var(--bd); border-radius:2px; }
+
+/* Panel internals */
+.ps { font-size:9px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--mt2); margin:14px 0 5px; }
+.ps:first-child { margin-top:0; }
+.ir { display:flex; gap:8px; margin-bottom:7px; align-items:flex-start; }
+.ik { font-size:11px; color:var(--mt2); min-width:78px; flex-shrink:0; padding-top:1px; }
+.iv { font-size:12px; color:var(--tx); line-height:1.55; }
+
+.risk-pips { display:flex; gap:3px; align-items:center; margin-bottom:4px; }
+.pip { width:18px; height:5px; border-radius:3px; background:var(--bd); }
+.pip.on.r { background:#ef4444; }
+.pip.on.a { background:#f59e0b; }
+.pip.on.g { background:#10b981; }
+
+.tag-row { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:6px; }
+.tag { font-size:10px; padding:2px 8px; border-radius:20px; font-weight:500; }
+.tag.or { background:#f9731620; color:#fb923c; border:1px solid #f9731640; }
+.tag.bl { background:#3b82f620; color:#60a5fa; border:1px solid #3b82f640; }
+.tag.gn { background:#10b98220; color:#34d399; border:1px solid #10b98140; }
+.tag.rd { background:#ef444420; color:#f87171; border:1px solid #ef444440; }
+.tag.pp { background:#8b5cf620; color:#a78bfa; border:1px solid #8b5cf640; }
+.tag.am { background:#f59e0b20; color:#fbbf24; border:1px solid #f59e0b40; }
+.tag.rm { background:#c084fc20; color:#c084fc; border:1px solid #c084fc40; }
+.tag.cy { background:#06b6d420; color:#22d3ee; border:1px solid #06b6d440; }
+
+.ev { background:var(--el); border:1px solid var(--bd); border-radius:8px; padding:9px 11px; margin-bottom:7px; }
+.ev-sev { display:inline-block; font-size:9px; font-weight:700; padding:1px 5px; border-radius:10px; margin-bottom:3px; }
+.ev-sev.h { background:#ef444420; color:#f87171; }
+.ev-sev.m { background:#f59e0b20; color:#fbbf24; }
+.ev-sev.l { background:#10b98120; color:#34d399; }
+.ev-date { font-size:10px; color:var(--mt2); margin-bottom:2px; }
+.ev-text { font-size:11px; color:var(--tx); line-height:1.5; }
+
+.power-wrap { display:flex; align-items:center; gap:5px; margin-bottom:4px; }
+.power-bar { flex:1; height:5px; background:var(--bd); border-radius:3px; overflow:hidden; }
+.power-fill { height:100%; border-radius:3px; }
+
+.buyer-card {
+  background:var(--el); border:1px solid var(--bd); border-radius:8px;
+  padding:9px 11px; margin-bottom:8px;
+}
+.buyer-name { font-size:13px; font-weight:700; color:#f1f5f9; margin-bottom:2px; }
+.buyer-mkt { font-size:9px; font-weight:600; padding:1px 6px; border-radius:10px; display:inline-block; margin-bottom:5px; }
+.buyer-mkt.eu { background:#10b98220; color:#34d399; }
+.buyer-mkt.ap { background:#3b82f620; color:#60a5fa; }
+.buyer-row { display:flex; gap:6px; margin-bottom:4px; }
+.buyer-key { font-size:10px; color:var(--mt2); min-width:58px; flex-shrink:0; }
+.buyer-val { font-size:11px; color:var(--tx); }
+
+.flow-summary {
+  display:flex; align-items:center; gap:8px; margin-bottom:14px;
+  background:var(--el); border:1px solid var(--bd); border-radius:8px; padding:10px 12px;
+}
+.flow-from { font-size:11px; color:#60a5fa; font-weight:600; }
+.flow-arrow { color:var(--mt2); font-size:14px; }
+.flow-to { font-size:11px; color:#34d399; font-weight:600; }
+
+/* TOOLTIP */
+.node-tooltip {
+  position:absolute; pointer-events:none;
+  background:var(--el); border:1px solid var(--bd);
+  border-radius:8px; padding:8px 12px;
+  font-size:11px; color:var(--tx);
+  box-shadow:0 4px 20px rgba(0,0,0,0.5);
+  opacity:0; transition:opacity 0.15s;
+  z-index:100; max-width:200px; line-height:1.5;
+}
+.node-tooltip.visible { opacity:1; }
+.tt-stage { font-size:9px; color:var(--mt2); font-weight:600; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:3px; }
+.tt-name { font-size:13px; font-weight:700; color:#f1f5f9; margin-bottom:4px; }
+
+/* CHIPS */
+.mat-chip {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:3px 10px 3px 8px; border-radius:20px;
+  background:#c084fc15; border:1px solid #c084fc30;
+  font-size:11px; color:#c084fc; font-weight:500;
+}
+
+/* EMPTY */
+.empty-hint { text-align:center; padding:60px 20px; color:var(--mt2); }
+.empty-icon { font-size:40px; margin-bottom:12px; opacity:0.4; }
+.empty-title { font-size:14px; font-weight:600; color:var(--mt); margin-bottom:6px; }
+.empty-text { font-size:12px; line-height:1.6; }
+
+/* AIR8 ALERT */
+.air8-alert {
+  background:#ef444410; border:1px solid #ef444430; border-radius:8px;
+  padding:10px 12px; margin:10px 0; font-size:11px; line-height:1.5; color:var(--tx);
+}
+.air8-alert-title { font-size:10px; font-weight:700; color:#f87171; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:5px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="brand-dot"></div>
+    <h1>Midasia Fashions Ltd / Midasia Group</h1>
+  </div>
+  <div class="header-meta">Supply Chain Map · Sep 2026</div>
+  <div class="hstat">Denim <span class="hstat-val">60%</span></div>
+  <div class="hstat">Non-Denom <span class="hstat-val">40%</span></div>
+  <div class="hstat">Workers <span class="hstat-val">4,800</span></div>
+  <div class="hstat">Lines <span class="hstat-val">36</span></div>
+  <div class="header-badges">
+    <span class="badge eu">🇪🇺 EU Primary</span>
+    <span class="badge ap">🌏 APAC Secondary</span>
+    <span class="badge rg">⚠️ LDC + India-EU FTA</span>
+  </div>
+</header>
+
+<div class="legend">
+  <span class="lbl">Stage</span>
+  <div class="li"><div class="ln grn"></div><span>Raw Material</span></div>
+  <div class="li"><div class="ln cyn"></div><span>Spinning</span></div>
+  <div class="li"><div class="ln blu"></div><span>Weaving/Denim</span></div>
+  <div class="li"><div class="ln amb"></div><span>Trim/Chemicals</span></div>
+  <div class="li"><div class="ln org"></div><span>MIDASIA</span></div>
+  <div class="li"><div class="ln gry"></div><span>Logistics</span></div>
+  <div class="li"><div class="ln grn"></div><span>Buyers</span></div>
+  <div class="lsep"></div>
+  <span class="lbl">Risk</span>
+  <div class="li"><div class="ln red"></div><span>High</span></div>
+  <div class="li"><div class="ln ylw"></div><span>Medium</span></div>
+  <div class="li"><div class="ln grn"></div><span>Low</span></div>
+  <div class="lsep"></div>
+  <span class="lbl">Navigate</span>
+  <div class="li" style="color:var(--mt2);font-size:11px">🖱 Click node or edge → Details</div>
+  <div class="li" style="color:var(--mt2);font-size:11px">Scroll = zoom · Drag = pan</div>
+</div>
+
+<div class="main">
+  <div class="canvas-wrap">
+    <svg id="canvas"></svg>
+    <div class="zoom-controls">
+      <button class="zoom-btn" onclick="zoomIn()">+</button>
+      <button class="zoom-btn" onclick="zoomOut()">−</button>
+      <button class="zoom-btn" onclick="resetView()" style="font-size:12px">⌂</button>
+    </div>
+  </div>
+  <div class="detail-panel closed" id="detailPanel">
+    <div class="panel-header">
+      <span class="pstage" id="pStage">—</span>
+      <span class="ptype player" id="pType">—</span>
+      <div class="ptitle" id="pTitle">—</div>
+      <button class="pclose" onclick="closePanel()">×</button>
+    </div>
+    <div class="panel-body" id="pBody"></div>
+  </div>
+</div>
+
+<div class="node-tooltip" id="tooltip">
+  <div class="tt-stage" id="ttStage"></div>
+  <div class="tt-name" id="ttName"></div>
+  <div id="ttRisk" style="margin-top:3px;font-size:10px"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+
+const STAGE_COLOR = {
+  "Raw Material":     "#10b981",
+  "Spinning":        "#06b6d4",
+  "Weaving":         "#3b82f6",
+  "Trim & Components":"#f59e0b",
+  "Manufacturing":    "#f97316",
+  "Logistics":       "#475569",
+  "Buyer":           "#10b981",
+};
+
+const RISK_COL  = { high: "#ef4444", medium: "#f59e0b", low: "#10b981" };
+const RISK_PIPS = { high: 3, medium: 2, low: 1 };
+
+// ── NODES ────────────────────────────────────────────────────────────────────
+const NODES = [
+  // ── RAW MATERIAL ────────────────────────────────────────────────────────
+  {
+    id:"cotton_india", stage:"Raw Material", x:0, y:0.3,
+    name:"India Cotton Farmers",
+    subtitle:"~35% BD lint imports; largest BD supplier",
+    type:"player", risk:"high", power:8, color:"#10b981",
+    detail:{
+      description:"India is Bangladesh's largest cotton lint supplier. BD imports ~8M bales/yr; India ~35%. Gujarat/Rajasthan/Maharashtra cotton belts. Long-staple cotton for denim comes from these regions. India cotton export duty waiver expired Nov 1, 2026 — now +16% import duty.",
+      whatTheyDo:"Grow & gin cotton. Sell baled cotton lint to spinners. India → BD via Benapole/Banglabandha land crossings.",
+      compliance:["UFLPA: India cotton = generally non-Xinjiang origin — low risk","GOTS for organic cotton","BCI voluntary"],
+      costDrivers:["ICE Cotton No.2 (global benchmark)","USD/INR exchange rate","India monsoon/acreage","Export duty regime changes"],
+      recentEvents:[
+        {date:"Nov 2026",text:"India cotton import duty waiver EXPIRED — 16% duty reinstated on BD imports. Mills that didn't pre-buy exposed.",sev:"h"},
+        {date:"Aug 2026",text:"ICE Cotton at 82.10 USc/lb (+27% YoY) — most severe spike in 3 years",sev:"h"},
+        {date:"Jan-Feb 2025",text:"China replaced India as top BD yarn supplier — India cotton competitive position weakening",sev:"m"},
+      ],
+    }
+  },
+  {
+    id:"cotton_usa", stage:"Raw Material", x:0, y:0.7,
+    name:"US Pima / Supima Cotton",
+    subtitle:"Premium — qualifies for US-BD deal 0% tariff lane",
+    type:"player", risk:"low", power:7, color:"#10b981",
+    detail:{
+      description:"US Pima/Supima cotton — premium long-staple fiber. Grown in California, Texas, Arizona. Qualifies for US-BD trade deal zero-tariff lane (Feb 2026): garments made with US-origin cotton get 0% US import duty vs 19% standard rate. Cost premium: ~20-30% above Indian cotton.",
+      whatTheyDo:"Large-scale commercial cotton farming with full traceability. ICE Futures price discovery. US Department of Agriculture (USDA) grading system.",
+      compliance:["USDA grading + SUPIMA trademark licensing","UFLPA: Near-zero risk for US-origin cotton","GOTS (organic)", "BCI"],
+      costDrivers:["ICE Cotton No.2 futures (USc/lb)","Ocean freight US→BD: ~$200/tonne","USD strength vs BDT","Climate risk (Texas drought)"],
+      recentEvents:[
+        {date:"2026",text:"US-BD trade deal creates strong incentive for BD garment makers to use US Pima cotton to access 0% tariff lane",sev:"m"},
+        {date:"2025",text:"US cotton area planted flat — supply constrained; prices supported at elevated levels",sev:"l"},
+      ],
+    }
+  },
+  {
+    id:"cotton_china", stage:"Raw Material", x:0, y:0.9,
+    name:"China (Xinjiang) Cotton",
+    subtitle:"⚠️ UFLPA RISK — do not use for US-bound goods",
+    type:"player", risk:"high", power:9, color:"#ef4444",
+    detail:{
+      description:"Xinjiang region produces ~87% of China's cotton and ~20% of global supply. UFLPA (Uyghur Forced Labor Prevention Act): CBP assumes all Xinjiang goods are made with forced labor unless proven otherwise. Detention/refusal at US port. China mills may blend Xinjiang cotton with other origins — difficult to detect without isotope testing.",
+      whatTheyDo:"Cotton farming in Xinjiang (Xinjiang Production and Construction Corps). Processing at gins in Xinjiang. Yarn/fabric manufacturing in Chinese mills.",
+      compliance:["UFLPA: HIGH RISK for US-bound garments — CBP detention","OEKO-TEX 100 (chemical safety only — does NOT clear UFLPA)"],
+      costDrivers:["Chinese government cotton reserve pricing (subsidized)","CNY/USD exchange rate","Logistics via Chinese domestic supply chain"],
+      riskFlags:["China replaced India as top BD yarn supplier Jan-Feb 2025 — UFLPA exposure now structural","Isotope testing (e.g., Oritain) required for US-bound claims of Xinjiang-free","No blockchain traceability from most Chinese mills"],
+      recentEvents:[
+        {date:"Jan-Feb 2025",text:"China fully replaced India as top yarn/fabric supplier to Bangladesh — structural shift in BD supply chain = new UFLPA risk",sev:"h"},
+        {date:"2025",text:"US CBP increased Xinjiang-cotton detention rate at US ports for textile products — Bangladesh RMG sector flagged",sev:"h"},
+      ],
+    }
+  },
+  // ── SPINNING ───────────────────────────────────────────────────────────
+  {
+    id:"spin_india", stage:"Spinning", x:1, y:0.3,
+    name:"Indian Yarn Spinners",
+    subtitle:"Vardhman, Trident, Indo Count — primary BD yarn source",
+    type:"player", risk:"high", power:7, color:"#06b6d4",
+    detail:{
+      description:"India is the dominant yarn supplier to Bangladesh for ring-spun cotton yarn (7-14 OE count for denim). Key mills: Vardhman Textiles (Ludhiana), Trident Group (Barnala), Indo Count Industries, Nahar Spinning. India supplies ~60% of BD cotton yarn historically. Yarn price adjusts with 90-180 day lag after cotton price moves.",
+      whatTheyDo:"Cotton lint → ring-spun/OE cotton yarn. Denim requires heavier count yarn (7-14 OE). Export to BD via land border (Benapole) and sea.",
+      compliance:["OEKO-TEX Standard 100 (yarn)","BCI certified yarn for EU buyers","UFLPA traceability: mill-level forced labor attestation for US-bound goods"],
+      costDrivers:["Cotton lint price (60-70% of yarn cost)","India-BD land freight (Benapole crossing)","Energy cost (gas/electricity)","USD/INR exchange","India export duty regime"],
+      riskFlags:["India export controls on certain yarn grades — supply disruption risk","India cotton duty waiver expiry → higher lint cost → yarn repricing","China replacing India as BD's top supplier — structural share loss"],
+      recentEvents:[
+        {date:"Nov 2026",text:"India cotton waiver expiry → 16% BD import duty on lint → spinners repricing yarn upward",sev:"h"},
+        {date:"Jan-Feb 2025",text:"China surpassed India as BD's top yarn supplier — India spinner market share eroding",sev:"m"},
+        {date:"2025",text:"India imposed export controls on certain cotton yarn counts — BD mills temporarily short",sev:"m"},
+      ],
+    }
+  },
+  {
+    id:"spin_china", stage:"Spinning", x:1, y:0.65,
+    name:"Chinese Yarn Mills",
+    subtitle:"⚠️ Growing share — UFLPA exposure for US-bound goods",
+    type:"player", risk:"high", power:8, color:"#06b6d4",
+    detail:{
+      description:"China's spinning industry is the world's largest. Chinese mills (Huafu Fashion Co., Zhejiang Xinao, etc.) have displaced India as BD's top yarn supplier since Jan-Feb 2025. Polyester textured yarn (PTY) also comes from China. Main risk: Xinjiang-adjacent supply chain = UFLPA exposure for any US-bound garments using Chinese yarn.",
+      whatTheyDo:"Cotton lint → cotton yarn. Polyester chips → PTY (polyester textured yarn). MMF (man-made fiber) production.",
+      compliance:["OEKO-TEX 100","UFLPA: HIGH RISK — Xinjiang-origin cotton suspected in many Chinese mill supply chains","REACH for MMF chemicals"],
+      costDrivers:["Cotton price (if Xinjiang subsidize: artificially low pricing)","CNY/USD exchange rate","Crude oil (polyester)","Ocean freight China→BD"],
+      riskFlags:["UFLPA: China-origin yarn used in US-bound BD garments = CBP detention risk","China mills have cost advantage from scale + Xinjiang labor practices","BD anti-dumping duty on Chinese PTY ($0.40-0.80/kg) — but volume still growing"],
+      recentEvents:[
+        {date:"Jan-Feb 2025",text:"China fully replaced India as top yarn/fabric supplier to Bangladesh — market share shift is structural",sev:"h"},
+        {date:"2025-2026",text:"BD imposed ADD on Chinese PTY yarn — but Chinese yarn still price-competitive",sev:"m"},
+      ],
+    }
+  },
+  {
+    id:"spin_bd", stage:"Spinning", x:1, y:0.9,
+    name:"BD Local Spinners",
+    subtitle:"Square Textiles — primarily knit yarn; limited denim capacity",
+    type:"player", risk:"medium", power:5, color:"#06b6d4",
+    detail:{
+      description:"Bangladesh has local spinning capacity but primarily for knit yarn (coarser counts). Denim requires 7-14 OE count ring-spun yarn — local BD capacity is limited and insufficient for BD's denim mill demand. BD local spinners are BCI members and OEKO-TEX certified.",
+      whatTheyDo:"Cotton lint → carded/combed cotton yarn for knitwear and basic wovens. Some vertical integration into weaving.",
+      compliance:["OEKO-TEX 100","BCI (Better Cotton Initiative)","amfori BSCI"],
+      costDrivers:["Cotton lint import cost (USD-denominated)","Energy cost (gas shortage risk)","Labor cost (BDT vs USD)"],
+      recentEvents:[
+        {date:"2026",text:"BD local spinning expanding — but still insufficient for denim-grade yarn at scale",sev:"l"},
+      ],
+    }
+  },
+  // ── WEAVING/DENIM ─────────────────────────────────────────────────────
+  {
+    id:"denim_bd", stage:"Weaving", x:2, y:0.3,
+    name:"BD Denim Fabric Mills",
+    subtitle:"Beximco, Chittagong Denim, Envoy, Amber, Pacific, Square Denim",
+    type:"player", risk:"medium", power:6, color:"#3b82f6",
+    detail:{
+      description:"Bangladesh has ~34 denim mills producing 435M yards/year. Covers ~50% of BD's denim fabric demand (up from ~30% in 2020). Key players: Beximco Denims (LEED-certified, largest), Chittagong Denim Mills (100% export-oriented), Envoy Textiles (ETL), Amber Denim, Pacific Jeans. Midasia's fabric sourced from these + Arvind (India) + Luthai (China).",
+      whatTheyDo:"Cotton yarn → denim fabric (sergo/satin/twill weaves) → finishing (stonewash, enzyme wash, laser, coating). Vertical weaving + dyeing.",
+      compliance:["OEKO-TEX 100 (fabric)","REACH (EU dyestuff restrictions)","bluesign (sustainable chemistry — Beximco, Envoy)","ZDHC wastewater standards","CA Prop 65 (formaldehyde, lead)"],
+      costDrivers:["Ring-spun yarn price (55-65% of fabric cost)","Energy (dyeing is energy-intensive — gas/coal)","Water/effluent treatment cost (CETP)","Elastane cost (Brent crude +22% YoY — stretch denim)"],
+      recentEvents:[
+        {date:"2025",text:"BD denim mill capacity expanded — now covering 50% of domestic demand (up from 30% in 2020)",sev:"l"},
+        {date:"2026",text:"BD ZDHC adoption accelerating — EU buyers (H&M, Primark) pushing mill-level compliance",sev:"m"},
+        {date:"2026",text:"Stretch denim demand up — elastane price tied to Brent crude (+22% YoY)",sev:"m"},
+      ],
+    }
+  },
+  {
+    id:"denim_india", stage:"Weaving", x:2, y:0.55,
+    name:"Arvind Ltd & Indian Mills",
+    subtitle:"Premium denim fabric — major supplier to BD garment industry",
+    type:"player", risk:"medium", power:7, color:"#3b82f6",
+    detail:{
+      description:"Arvind Limited (Ahmedabad) is India's largest denim fabric exporter and a key supplier to BD garment factories. Arvind's advanced weaving (woven on modern looms) produces premium stretch and specialty denim. Quality consistency and wide variety make Arvind preferred for mid-to-premium denim programs. Luthai Textile (China) also a consistent BD importer.",
+      whatTheyDo:"Premium denim weaving + dyeing. Specialty washes and finishes. OEKO-TEX and GOTS certified lines.",
+      compliance:["OEKO-TEX 100","GOTS (organic denim lines)","bluesign","REACH","Higg Index FEM"],
+      costDrivers:["Cotton lint price (India)","Arvind premium brand pricing power","USD/INR","Freight: India→BD (Benapole road/barge)"],
+      recentEvents:[
+        {date:"Dec 2025",text:"Arvind confirmed as dominant BD denim fabric importer — consistent supplier relationship",sev:"l"},
+        {date:"2026",text:"Arvind invested in recycled cotton denim line — sustainability premium for EU buyers",sev:"l"},
+      ],
+    }
+  },
+  {
+    id:"denim_china", stage:"Weaving", x:2, y:0.8,
+    name:"Chinese Denim Mills",
+    subtitle:"⚠️ Luthai / Shandong Ruyi — UFLPA watchlist for US-bound",
+    type:"player", risk:"high", power:7, color:"#3b82f6",
+    detail:{
+      description:"Luthai Textile Co. (Shandong) and Shandong Ruyi Technology Group are major Chinese denim fabric exporters to Bangladesh. Consistent quality, wide variety of finishes. Key risk: Shandong province neighbors Xinjiang — UFLPA exposure if any Xinjiang-origin cotton in supply chain.",
+      whatTheyDo:"Premium denim fabric production. Specialty finishes. Recycled/sustainable denim lines.",
+      compliance:["OEKO-TEX 100","GRS (Global Recycled Standard)","bluesign","REACH","⚠️ UFLPA: Xinjiang-adjacent geography — US-bound risk"],
+      costDrivers:["China manufacturing cost (rising)","CNY appreciation risk","Ocean freight China→BD","Tariff + safeguard duties on Chinese fabric into BD"],
+      riskFlags:["UFLPA: Xinjiang proximity = CBP detention risk for US-bound garments","BD safeguard duties on Chinese fabric (protective of BD mills)"],
+      recentEvents:[
+        {date:"Dec 2025",text:"Luthai Textile confirmed as consistent major BD denim importer per Textile Trade Trends report",sev:"l"},
+        {date:"2025-2026",text:"BD safeguard duties on Chinese fabric remain in place — cost pressure on BD importers of Chinese fabric",sev:"m"},
+      ],
+    }
+  },
+  // ── TRIM & COMPONENTS ─────────────────────────────────────────────────
+  {
+    id:"trim_zipper", stage:"Trim & Components", x:3, y:0.2,
+    name:"YKK Bangladesh",
+    subtitle:"Global zipper leader — ~60% BD market; premium buyers mandate YKK",
+    type:"player", risk:"low", power:9, color:"#f59e0b",
+    detail:{
+      description:"YKK Corporation (Japan) dominates global zipper market (~60%). YKK Bangladesh (Dhaka/Ashulia) has 3 facilities. Non-substitutable for many buyers: Target, Walmart, H&M require YKK or equivalent on premium lines. YKK EcoForce (recycled polyester zipper) in demand for sustainability programs.",
+      whatTheyDo:"Metal zippers (brass), molded plastic zippers, nylon coil zippers, snap buttons, rivets.",
+      compliance:["OEKO-TEX 100 (zippers, hardware)","REACH (metal coatings, plastic additives)","ISO 14001 (YKK BD facility)"],
+      costDrivers:["LME brass/zinc price (metal zippers)","USD/BDT (BDT depreciation = cost increase)","YKK global pricing power — limited buyer leverage"],
+      recentEvents:[
+        {date:"2026",text:"YKK India raised prices 8% following rupee depreciation — BD subsidiary may follow",sev:"m"},
+        {date:"2025",text:"YKK EcoForce (recycled polyester zipper) launched — growing demand from H&M, Zara sustainability programs",sev:"l"},
+      ],
+    }
+  },
+  {
+    id:"trim_labels", stage:"Trim & Components", x:3, y:0.45,
+    name:"Midasia Label & Packaging (Own Unit)",
+    subtitle:"In-house — cost efficiency; captive supplier",
+    type:"player", risk:"low", power:4, color:"#f59e0b",
+    detail:{
+      description:"Midasia Group owns a label printing and packaging unit — captive supplier. Produces: woven labels, printed hang tags, barcodes, GS1 RFID labels, polybags, tissue paper. Owning this unit reduces trim cost vs outsourced and ensures faster turnaround.",
+      whatTheyDo:"Woven labels, printed labels, barcode/RFID tags, packaging materials.",
+      compliance:["OEKO-TEX 100 (paper/textile labels)","GOTS labels (organic product lines)","GS1 barcode compliance"],
+      costDrivers:["Paper/cardstock price (USD-denominated import)","Ink cost","MOQ efficiency (captive = full utilization)"],
+      recentEvents:[
+        {date:"2025",text:"Paper price up 12% globally — trim cost pass-through to buyers",sev:"m"},
+      ],
+    }
+  },
+  {
+    id:"trim_chemicals", stage:"Trim & Components", x:3, y:0.7,
+    name:"Wash Chemicals & Dyes",
+    subtitle:"Huntsman, DyStar — via BD local agents; ZDHC-compliant required",
+    type:"player", risk:"medium", power:5, color:"#f59e0b",
+    detail:{
+      description:"Denim washing (Midasia's Washing Ltd: 2.5M pcs/month capacity) requires chemicals from global dye houses. Key suppliers: Huntsman (Switzerland), DyStar (Germany/Singapore), Archroma (Switzerland). Distributed via local BD agents. ZDHC MMS compliance is now mandatory for EU buyer supply chains.",
+      whatTheyDo:"Reactive dyes, indigo dye (for denim), enzymes (cellulase for stonewash), softeners, coatings, laser-ablative chemicals.",
+      compliance:["ZDHC MRSL (Manufacturing Restricted Substances List) — mandatory for H&M, Primark, Lidl","REACH (EU chemical restrictions)","OEKO-TEX 100 (dye stuff)","bluesign (sustainable chemistry)"],
+      costDrivers:["Crude oil (feedstock for chemicals)","China chemical export restrictions (environmental policy)","USD/BDT","Regulatory compliance cost"],
+      riskFlags:["EU REACH proposals for additional dye restrictions (2026)","CA Prop 65 PFAS updates — waterproofing on outerwear now scrutinized","Huntsman/DyStar price increases passed to BD agents → Midasia"],
+      recentEvents:[
+        {date:"2026",text:"EU REACH amendment proposals for additional dye restrictions under review",sev:"m"},
+        {date:"2026",text:"CA Prop 65 PFAS update — waterproofing finishes on outerwear (quilted jackets) now scrutinized",sev:"m"},
+        {date:"2025-2026",text:"ZDHC wastewater compliance becoming mandatory for EU buyer supply chains",sev:"m"},
+      ],
+    }
+  },
+  {
+    id:"trim_thread", stage:"Trim & Components", x:3, y:0.9,
+    name:"Thread & Interlining",
+    subtitle:"Coats Bangladesh, Freudenberg — commodity trim",
+    type:"player", risk:"low", power:4, color:"#f59e0b",
+    detail:{
+      description:"Thread (Coats Bangladesh, A&E Thread) and interlining (Freudenberg, Kufner) are commodity trims. Highly competitive market — low switching cost. Supplier disruption is low risk.",
+      whatTheyDo:"Embroidery thread, sewing thread, woven/non-woven interlining.",
+      compliance:["OEKO-TEX 100 (thread)","REACH (interlining chemicals)"],
+      costDrivers:["Polyester price (thread)","USD/BDT","Commodity pricing — competitive market"],
+      recentEvents:[
+        {date:"2026",text:"Polyester thread price up on crude oil increase — minor cost impact",sev:"l"},
+      ],
+    }
+  },
+  // ── MIDASIA (CENTER) ──────────────────────────────────────────────────
+  {
+    id:"midasia", stage:"Manufacturing", x:4, y:0.5,
+    name:"Midasia Group Manufacturing",
+    subtitle:"Denim 60% · Woven 40% · Women/Men/Kids · EU Primary · APAC Secondary",
+    type:"player", risk:"high", power:3, color:"#f97316",
+    isCentral:true,
+    detail:{
+      description:"Midasia Group (Mirpur, Dhaka, est. 1992) is a vertically integrated RMG manufacturer. 4,800 workers, 36 production lines, 1.4M pcs/month capacity. Owns: garment factory, washing (2.5M pcs/month wet+dry, has ETP), embroidery, screen print, dry process (laser/enzyme/ozone), label printing, C&F logistics. 60% denim (jeans, pants, shorts, overalls), 40% non-denim (shirts, blouses, jackets). Women/men/kids. Air8 client: C0001130, COMBO-002.",
+      whatTheyDo:"CMT (Cut-Make-Trim) and FOB garment manufacturing. Full package orders. In-house washing, embellishment, and logistics.",
+      products:[
+        {cat:"Denim Bottom Wear", items:["Jeans","Denim pants","Denim shorts","Denim overalls","Denim caprices"], share:"~60%"},
+        {cat:"Non-Denom Bottom", items:["Basic pants","Shorts","Caprices","Overalls","Pyjama sets"], share:"~20%"},
+        {cat:"Top Wear", items:["Quilted shirts","Basic shirts","Blouses","Jumpers","Rompers"], share:"~15%"},
+        {cat:"Outer Wear", items:["Quilted jackets","Parkas","Snow wear"], share:"~5%"},
+      ],
+      compliance:["BSCI / SEDEX SMETA (buyer qualification standard)","OEKO-TEX Standard 100","REACH","GOTS (if organic product)","RSC (Bangladesh Factory Safety)","ZDHC (washing facility)","CSDDD traceability (2026-27 EU buyer requirement)","UFLPA (if US-bound shipments)","CA Prop 65"],
+      costDrivers:["Labor cost (post-56% minimum wage hike 2024)","Fabric/yarn (buyer-nominated — Midasia bears wage without offset)","Energy (electricity + diesel backup)","Bank LC cost (3-5% + 45-60 day processing)","Working capital (90-120 day cycle + 30% prepay at booking)"],
+      riskFlags:[
+        "BUYER-NOMINATED FABRIC (~90%): Midasia does NOT choose fabric source — bears wage costs without raw material arbitrage benefit",
+        "EU LDC Graduation (Nov 2026 → EBA expiry post-2029): 9-12% MFN tariff threatens EU price competitiveness",
+        "India-EU FTA (Jan 2026): India gains EU preferential access ~2028 — eliminates BD's EBA competitive moat",
+        "US Tariff 19% (Feb 2026 BD-US deal): BD export prices down 2.26% YoY in 7M 2026 — factories absorbing tariff burden",
+        "Wage hike +56% (2024): Fully unilateral cost burden — buyer-nominated fabric prevents input offset; margin compressed from already thin 5-12%",
+        "CSDDD Traceability Gap: EU buyers requiring 2-3 years ahead of 2029 deadline — documentation infrastructure likely insufficient",
+        "UFLPA US exposure: China-origin yarn/fabric used for any US buyer orders = CBP detention risk",
+        "Political instability: Hartals = 15-20 lost production days/year",
+        "Working capital: 90-120 day cycle + 30% prepay = acute WC pinch; Air8 ARP product directly addresses this",
+      ],
+      air8:{
+        clientId:"C0001130",
+        combo:"COMBO-002",
+        revenueBand:"<$5M",
+        type:"FOB",
+        advanceRatio:"Normal 80%, alert at 70% (2+ deteriorating signals same quarter)",
+        keyMonitors:"PO volume trend (top 2 EU buyers), payment speed, factory utilization, LDC graduation buyer pre-positioning",
+        wcPinch:"90-120 day cash cycle + 30% prepay at order booking = acute WC need; ARP and PRESHIP-RT2C directly fit",
+      },
+      recentEvents:[
+        {date:"Nov 2026",text:"LDC Graduation trigger — EU EBA clock starts. Post-2029 MFN tariff 9-12% threatens EU competitiveness.",sev:"h"},
+        {date:"Jan 2026",text:"India-EU FTA announced — India gains EU preferential access ~2028, eliminating BD's EBA advantage",sev:"h"},
+        {date:"Sep 2026",text:"BD apparel export prices to US down 2.26% YoY in 7M 2026 — buyer price pressure absorbing tariff",sev:"h"},
+        {date:"2024",text:"BD minimum wage +56% — unilateral cost burden. Buyer-nominated fabric prevents any offset.",sev:"h"},
+        {date:"2024",text:"Post-election political instability — hartals disrupted Q1-Q2 production",sev:"m"},
+        {date:"2025-2026",text:"Multiple BD competitor factories closed due to combined wage + buyer price pressure",sev:"m"},
+      ],
+    }
+  },
+  // ── LOGISTICS ─────────────────────────────────────────────────────────
+  {
+    id:"log_midasia", stage:"Logistics", x:5, y:0.3,
+    name:"Midasia Logistics (Own C&F)",
+    subtitle:"Own C&F + transport unit — competitive advantage vs competitors",
+    type:"player", risk:"low", power:5, color:"#475569",
+    detail:{
+      description:"Midasia Group owns its own Clearing & Forwarding (C&F) and transport unit — a structural advantage over competitors who outsource logistics. Handles: factory → Chittagong Port trucking, customs clearance under bonded warehouse scheme (duty-free raw material import for export manufacturing), export documentation.",
+      whatTheyDo:"Inland transport (Mirpur Dhaka → Chittagong Port, ~250km), customs clearance, bonded warehouse management, export documentation.",
+      compliance:["Bangladesh customs bond license (duty-free input imports under export manufacturing scheme)","CTPAT (if US-bound cargo)","EU ENS (Entry Summary Declaration)"],
+      costDrivers:["Diesel price (Dhaka-Chittagong trucking)","Port handling fees (Chittagong)","Customs broker professional fee (minimal — own C&F)"],
+      recentEvents:[
+        {date:"2026",text:"Own C&F = margin retention at logistics layer vs competitors who pay third-party",sev:"l"},
+      ],
+    }
+  },
+  {
+    id:"log_port", stage:"Logistics", x:5, y:0.6,
+    name:"Chittagong Port Authority",
+    subtitle:"BD's sole major container port — handles 92% of BD trade",
+    type:"player", risk:"medium", power:7, color:"#475569",
+    detail:{
+      description:"Chittagong Port Authority (CPA): Bangladesh's primary and nearly sole container export gateway. Chronic congestion, aging equipment, limited deep-water berths. New Bay Terminal (NBT) project adding capacity (Phase 1 completed 2026, full completion 2027). Single point of failure for entire BD export sector.",
+      whatTheyDo:"Port operations: cargo handling, storage, customs clearance, vessel scheduling.",
+      compliance:["ISPS (International Ship and Port Facility Security Code)","WCO standards"],
+      costDrivers:["Demurrage: $50-150/container/day after free time expiry","Port congestion = +5-7 day vessel wait = demurrage cost","Stevedoring + documentation fees","New Bay Terminal user fees (2027+)"],
+      riskFlags:["Single gateway: any disruption affects all BD exporters","Monsoon season (Jun-Sep) slows cargo handling","Hartals/strikes can shut port operations","Ranked 82nd/100 in Container Port Performance Index — below Colombo, Kolkata"],
+      recentEvents:[
+        {date:"2026",text:"New Bay Terminal berth 1 completed — +300K TEU capacity, congestion beginning to ease",sev:"l"},
+        {date:"2025",text:"Chittagong port ranked 82nd/100 globally in Container Port Performance Index",sev:"m"},
+        {date:"2024-2026",text:"SCFI elevated 3,000+ vs 800-1,200 in 2024 — logistics cost substantially higher",sev:"m"},
+      ],
+    }
+  },
+  {
+    id:"log_carriers", stage:"Logistics", x:5, y:0.85,
+    name:"Ocean Carriers",
+    subtitle:"Maersk, MSC, Hapag-Lloyd — oligopoly sets freight rates",
+    type:"player", risk:"medium", power:8, color:"#475569",
+    detail:{
+      description:"Ocean freight dominated by Maersk (#1 globally, ~50% BD market), MSC, CMA CGM, Hapag-Lloyd. Post-COVID carrier consolidation = reduced schedule reliability. SCFI (Shanghai Containerized Freight Index) elevated ~3,000-3,200 vs $800-1,200 trough in 2024. Under FOB terms, buyer nominates carrier — but Midasia's own C&F still interfaces.",
+      whatTheyDo:"Ocean freight (FCL/LCL), BAF (bunker adjustment factor) surcharges, vessel scheduling.",
+      compliance:["IMO 2023 decarbonization (CII rating regime)","CTPAT","EU ETS (maritime emissions — potential 2026-27 levy)"],
+      costDrivers:["SCFI index (container rates)","Brent crude (bunker fuel)","Carrier surcharges (BAF, PSS)","IMO CII surcharges (2023 onwards)"],
+      recentEvents:[
+        {date:"Aug 2026",text:"BDI at 2,843 pts (+44% YoY) — dry bulk freight elevated, affects upstream raw material import",sev:"m"},
+        {date:"2026",text:"IMO CII carbon intensity rating regime — carriers passing decarbonization surcharges to shippers",sev:"m"},
+        {date:"2026",text:"Ocean freight Asia-BD $1,800-2,200/TEU (vs $900 in 2024 trough)",sev:"m"},
+      ],
+    }
+  },
+  // ── BUYERS ────────────────────────────────────────────────────────────
+  {
+    id:"buyer_primark", stage:"Buyer", x:6, y:0.15,
+    name:"Primark (Associated British Foods)",
+    subtitle:"🇪🇺 EU Discount Fashion · Largest single EU buyer risk",
+    type:"player", risk:"high", power:10, color:"#10b981",
+    detail:{
+      description:"Primark (ABF, Dublin) — EU's largest discount fashion retailer. BD is a core sourcing country for basics/denim. Primark's model: lowest price = maximum cost pressure on factories. Known for extremely aggressive pricing. Key buyer for Midasia's denim program.",
+      buyerProfile:{
+        spendOnBD:"~$500M apparel from BD (est.)",
+        model:"Primark approved supplier list — direct CM relationships + agents",
+        payment:"OA 60-90 days",
+        pricePressure:"EXTREME — Primark's entire model is lowest cost. Any cost increase absorbed by supplier.",
+        requirements:["BSCI / SEDEX SMETA (social audit)","OEKO-TEX 100","Primark RSL (restricted substances)","Primark Supplier Standards"],
+      },
+      compliance:["BSCI/SEDEX 4-pillar audit","Primark RSL","OEKO-TEX 100","Primark Environmental Standards"],
+      costDrivers:["Extreme pricing pressure — no room for FOB price increases","Primark has shifted sourcing to Ethiopia/Cambodia as BD cost rises","Primark's volume is price-driven, not quality-driven"],
+      riskFlags:["LDC graduation: Primark will shift orders to lower-cost countries before BD MFN tariffs hit (2027-28 pre-positioning)","India-EU FTA: India becomes competitive EU supplier by 2028","Loss of Primark = 20-30% Midasia revenue at risk"],
+      recentEvents:[
+        {date:"2026",text:"Primark expanding sourcing into Ethiopia and Cambodia as Bangladesh contingency — order migration beginning",sev:"h"},
+        {date:"2025",text:"Primark rejected price increase requests from BD suppliers citing wage hike — margin fully absorbed by factories",sev:"h"},
+      ],
+      impactOnMidasia:"Primark is likely Midasia's #1 or #2 buyer by volume. Extreme pricing pressure. If Primark begins order migration to lower-cost countries pre-LDC, Midasia faces existential revenue risk. The 56% wage hike was absorbed entirely by BD factories — Primark refused to pay more.",
+    }
+  },
+  {
+    id:"buyer_lidl", stage:"Buyer", x:6, y:0.38,
+    name:"Lidl / Aldi (Germany)",
+    subtitle:"🇪🇺 EU Discount Retail · Strong private label basics",
+    type:"player", risk:"high", power:9, color:"#10b981",
+    detail:{
+      description:"Lidl (Schwarz Group, Germany) and Aldi are Europe's dominant discount retailers. Both source heavily from Bangladesh for private label basics. Lidl has strict supplier standards (SAI Platform, amfori BSCI) but maximum pricing discipline.",
+      buyerProfile:{
+        spendOnBD:"~$400M apparel from BD (est.)",
+        model:"Direct buying office + global agents",
+        payment:"OA 60 days",
+        pricePressure:"HIGH — discount retail model requires constant cost reduction",
+        requirements:["amfori BSCI","Lidl Standard (Knigge-scale compliance)","OEKO-TEX 100","Lidl Sustainability Standards"],
+      },
+      compliance:["amfori BSCI","Lidl Supplier Standards","OEKO-TEX 100","Lidl Social Standards"],
+      riskFlags:["LDC graduation: discount retailers most sensitive to cost increases — first to shift sourcing","India-EU FTA competitive threat ~2028"],
+      recentEvents:[
+        {date:"2026",text:"Lidl increasing sourcing from India/Pakistan for BD-competitive product categories",sev:"m"},
+      ],
+      impactOnMidasia:"Stable volume but maximum price discipline. Lidl's discount model means any new cost (tariff, wage) must be absorbed by the factory.",
+    }
+  },
+  {
+    id:"buyer_hm", stage:"Buyer", x:6, y:0.58,
+    name:"H&M Group",
+    subtitle:"🇪🇺 EU Fast Fashion · Sustainability-driven · Bluesign/ZDHC",
+    type:"player", risk:"medium", power:9, color:"#10b981",
+    detail:{
+      description:"H&M (Stockholm) — #2 global fashion retailer by volume. BD is a key sourcing country. H&M's model: volume + sustainability investment required. H&M has the most stringent compliance requirements of Midasia's buyer base. Living wage roadmap means H&M pays living wage premium to workers (helps Midasia retain workforce).",
+      buyerProfile:{
+        spendOnBD:"~$1.5B from BD",
+        model:"H&M Global Sourcing — direct factory relationships, own Dhaka buying office",
+        payment:"Net 60 days from ship",
+        pricePressure:"MEDIUM-HIGH — but values compliance and sustainability investment",
+        requirements:["H&M Production Partner Standards (PPS)","Higg Index FEM (environmental module)","bluesign or ZDHC Level 3","OEKO-TEX 100","H&M RSL","Living wage roadmap (H&M pays living wage premium to workers)"],
+      },
+      compliance:["H&M PPS","OEKO-TEX 100","WRAP or SA8000","bluesign / ZDHC MMS Level 3","Higg FEM"],
+      riskFlags:["CSDDD cascade: H&M already requiring supply chain traceability data 2-3 years ahead of 2029 regulation","H&M moving ZDHC requirements down to Tier 2 (fabric mills) — Midasia must ensure mill compliance","EU due diligence tightens faster than regulation requires"],
+      recentEvents:[
+        {date:"2026",text:"H&M accelerating supply chain sustainability audit — pushing ZDHC compliance to fabric mills (Tier 2)",sev:"m"},
+        {date:"2026",text:"H&M launched 'Fiber Forever' sustainability standard — requires recycled/organic cotton content",sev:"m"},
+        {date:"2025",text:"H&M sourcing consolidated from 3 agents to 1 — relationship stability monitoring required",sev:"l"},
+      ],
+      impactOnMidasia:"Strategic EU buyer. Living wage premium helps Midasia with worker retention. Strong compliance investment needed. CSDDD data infrastructure must be built. H&M is the 'quality' buyer in Midasia's mix.",
+    }
+  },
+  {
+    id:"buyer_ca", stage:"Buyer", x:6, y:0.78,
+    name:"C&A (Belgium/Netherlands)",
+    subtitle:"🇪🇺 EU Mid-Market Wovens/Denim · Strong sustainability",
+    type:"player", risk:"medium", power:8, color:"#10b981",
+    detail:{
+      description:"C&A (Rotterdam) — EU mid-market retailer with strong sustainability brand. Sourcing for womenswear and denim. BD is a key sourcing country. C&A's Cradle to Cradle approach drives material-level sustainability requirements.",
+      buyerProfile:{
+        model:"Direct sourcing",
+        payment:"OA 60-75 days",
+        pricePressure:"MEDIUM — mid-market positioning",
+        requirements:["Cradle to Cradle (C2C) certified materials","OEKO-TEX 100","amfori BSCI","C&A Sustainable Supply Chain Standard"],
+      },
+      riskFlags:["CSDDD readiness: C&A requires full supply chain transparency documentation","LDC graduation: mid-market buyers have alternatives in India, Egypt"],
+      recentEvents:[
+        {date:"2026",text:"C&A began GSP+ readiness assessments for BD suppliers — Midasia compliance status unknown",sev:"m"},
+      ],
+      impactOnMidasia:"Quality-focused EU buyer. Sustainable product lines (C2C) are growth opportunity for Midasia if compliance investment is made.",
+    }
+  },
+  {
+    id:"buyer_apac", stage:"Buyer", x:6, y:0.95,
+    name:"APAC Buyers",
+    subtitle:"🌏 Target Australia, Kmart, Cotton On · Japan/Korea quality",
+    type:"player", risk:"medium", power:7, color:"#3b82f6",
+    detail:{
+      description:"APAC buyers represent Midasia's secondary market. Australia: Target Australia, Kmart Australia (Wesfarmers), Cotton On Group. Japan/Korea: higher quality threshold, OEKO-TEX mandatory, shorter lead times. Less compliance complexity than EU but margin pressure from China/Vietnam competition.",
+      buyerProfile:{
+        model:"Direct + regional agents",
+        payment:"OA 60 days or LC",
+        pricePressure:"MEDIUM — competitive with Vietnam/Cambodia",
+        requirements:["OEKO-TEX 100","AU Mandatory Standard (product safety)","Japan Household Goods Quality Labeling Act","APAC RSL"],
+      },
+      riskFlags:["Australia: no LDC-equivalent duty preference — competitive with Vietnam/Cambodia","Vietnam/Cambodia shorter lead times to APAC","APAC buyers more price-sensitive than EU sustainability-focused buyers"],
+      recentEvents:[
+        {date:"2026",text:"Some APAC buyers diversifying away from BD due to US tariff-induced price instability",sev:"m"},
+        {date:"2025",text:"Australia-BD garment trade stable; no major tariff changes",sev:"l"},
+      ],
+      impactOnMidasia:"Secondary market. Diversification from EU dependence. Lower compliance burden but also lower margin. APAC growth is strategic buffer against EU LDC risk.",
+    }
+  },
+];
+
+// ── FLOWS ────────────────────────────────────────────────────────────────────
+const FLOWS = [
+  // Cotton → Spinning
+  {
+    id:"f_cotton_india", from:"cotton_india", to:"spin_india",
+    material:"Cotton Lint (baled)",
+    hs:"5201.00", unit:"bale (~170kg)",
+    fromName:"India Farms", toName:"Indian Spinners",
+    tariff:"India cotton lint → BD: 0% duty (but India export duty may apply on cotton); India export duty waiver EXPIRED Nov 1, 2026 → 16% BD import duty now applies",
+    compliance:"UFLPA: India cotton = generally non-Xinjiang = low risk. Recommend due diligence on Gujarat origin.",
+    costDrivers:["ICE Cotton 82.10 USc/lb (+27% YoY)","Benapole/Banglabandha crossing freight: ~$0.05/kg","India export duty (now reinstated)"],
+    currentPrice:"~₹230-250/kg spot Gujarat (Oct 2026, before duty reinstatement)",
+    riskFlags:["India export duty reinstatement Nov 2026 → +16% cost layer for BD mills that didn't pre-buy"],
+  },
+  {
+    id:"f_cotton_usa", from:"cotton_usa", to:"spin_india",
+    material:"US Pima/Supima Cotton Lint",
+    hs:"5201.00", unit:"bale (~170kg)",
+    fromName:"US Cotton Farms", toName:"Indian Spinners",
+    tariff:"US cotton lint → BD: 0% duty. Qualifies for US-BD trade deal 0% tariff on garments.",
+    compliance:"UFLPA: Near-zero risk. Full traceability from US farm to gin.",
+    costDrivers:["ICE Cotton No.2 futures","Ocean freight US→BD: ~$200/tonne","Cost premium: ~20-30% above Indian cotton"],
+    currentPrice:"~90 USc/lb CIF Chittagong (US Pima)",
+    riskFlags:["Cost premium limits adoption — only viable for US-bound premium programs"],
+  },
+  {
+    id:"f_cotton_china", from:"cotton_china", to:"spin_china",
+    material:"Cotton Lint (⚠️ Xinjiang Risk)",
+    hs:"5201.00", unit:"bale",
+    fromName:"Xinjiang / China Farms", toName:"Chinese Spinners",
+    tariff:"China cotton → China domestic use",
+    compliance:"⚠️ UFLPA HIGH RISK: CBP assumes Xinjiang origin unless proven otherwise. Isotope testing required for US-bound claims.",
+    costDrivers:["Subsidized pricing from Chinese government reserve","CNY/USD"],
+    riskFlags:["China now BD's top yarn supplier as of Jan-Feb 2025 — UFLPA exposure is now STRUCTURAL for BD RMG"],
+  },
+  // Spinning → Weaving
+  {
+    id:"f_yarn_india", from:"spin_india", to:"denim_bd",
+    material:"Ring-Spun Cotton Yarn (7-14 OE)",
+    hs:"5205.00", unit:"kg",
+    fromName:"Indian Spinners", toName:"BD Denim Mills",
+    tariff:"BD import duty on cotton yarn from India: 0-5% depending on count",
+    compliance:"OEKO-TEX 100. BCI certified yarn for EU buyers. UFLPA attestation required for US-bound programs.",
+    costDrivers:["Cotton lint price (60-70% of yarn cost)","90-180 day lag in yarn price adjustment vs cotton spot","Benapole land freight"],
+    currentPrice:"~$3.20-3.80/kg for 14s ring-spun cotton yarn (BD delivery, Oct 2026)",
+    riskFlags:["India losing BD market share to China — structural shift reduces India spinner leverage over time"],
+  },
+  {
+    id:"f_yarn_china", from:"spin_china", to:"denim_bd",
+    material:"Cotton Yarn + PTY (⚠️ UFLPA Risk)",
+    hs:"5205.00 / 5402.33", unit:"kg",
+    fromName:"Chinese Spinners", toName:"BD Denim Mills",
+    tariff:"Chinese cotton yarn → BD: 5% duty. ADD on PTY: $0.40-0.80/kg.",
+    compliance:"⚠️ UFLPA: Chinese yarn with Xinjiang-adjacent supply chain = HIGH RISK for US-bound BD garments.",
+    costDrivers:["CNY/USD","China ADD surcharge on PTY","Ocean freight China→BD"],
+    currentPrice:"~$2.80-3.20/kg cotton yarn CIF Chittagong; PTY $1.10-1.30/kg after ADD",
+    riskFlags:["China yarn share growing despite ADD — cost competitive even with duty surcharge"],
+  },
+  {
+    id:"f_yarn_india_arvind", from:"spin_india", to:"denim_india",
+    material:"Ring-Spun Cotton Yarn",
+    hs:"5205.00", unit:"kg",
+    fromName:"Indian Spinners", toName:"Arvind Ltd",
+    tariff:"Intra-India transfer — 0%",
+    compliance:"Internal supply chain for Arvind's own fabric production",
+    costDrivers:["Cotton lint price"],
+    currentPrice:"Captive — internal transfer pricing",
+  },
+  // Weaving → Trim/Midasia
+  {
+    id:"f_denim_bd", from:"denim_bd", to:"midasia",
+    material:"Denim Fabric (BD Mills)",
+    hs:"5209-5212", unit:"metres",
+    fromName:"BD Denim Mills", toName:"Midasia",
+    tariff:"N/A (intra-BD movement — 0% duty)",
+    compliance:"OEKO-TEX 100. REACH. bluesign (Beximco, Envoy). ZDHC wastewater. CA Prop 65 for US-bound.",
+    costDrivers:["Ring-spun yarn price (55-65% of fabric cost)","Energy (dyeing)","Water/effluent (CETP)","Elastane (Brent crude +22% YoY)"],
+    currentPrice:"~$2.50-4.00/metre finished denim fabric (depends on weight/construction/wash)",
+    riskFlags:["Buyer-nominated ~90%: Midasia does NOT choose fabric supplier or negotiate price — all wage/overhead increases absorbed without input offset"],
+  },
+  {
+    id:"f_denim_india", from:"denim_india", to:"midasia",
+    material:"Premium Denim Fabric (Arvind)",
+    hs:"5209-5212", unit:"metres",
+    fromName:"Arvind Ltd", toName:"Midasia",
+    tariff:"India→BD fabric import: 0-10% depending on HS subheading; no duty under South Asian trade norms for fabrics",
+    compliance:"OEKO-TEX 100. GOTS (organic denim lines). bluesign. REACH.",
+    costDrivers:["Arvind premium pricing power","Freight India→BD (Benapole crossing)","Cotton lint price (India)"],
+    currentPrice:"~$3.00-5.50/metre premium denim fabric (Arvind)",
+    riskFlags:["India export duty risk on fabric (India sometimes imposes)","India-EU FTA: if India gains EU access, Arvind may prioritize EU buyers over BD"],
+  },
+  {
+    id:"f_denim_china", from:"denim_china", to:"midasia",
+    material:"Specialty Denim (China — ⚠️ UFLPA)",
+    hs:"5209-5212", unit:"metres",
+    fromName:"Luthai / Ruyi", toName:"Midasia",
+    tariff:"BD safeguard duties on Chinese fabric: 10-25% depending on HS",
+    compliance:"⚠️ OEKO-TEX 100 alone does NOT clear UFLPA. Shandong = Xinjiang-adjacent = CBP detention risk for US-bound garments.",
+    costDrivers:["China manufacturing cost","Ocean freight","BD safeguard duties"],
+    riskFlags:["UFLPA: Luthai/Ruyi Shandong origin = CBP detention risk for US-bound garments"],
+  },
+  // Trims → Midasia
+  {
+    id:"f_trim_zipper", from:"trim_zipper", to:"midasia",
+    material:"Zippers + Hardware (YKK)",
+    hs:"9607.11/9607.19", unit:"gross",
+    fromName:"YKK Bangladesh", toName:"Midasia",
+    tariff:"YKK Bangladesh local supply: 0%",
+    compliance:"OEKO-TEX 100 (zippers, hardware). REACH (coatings). YKK test reports per buyer.",
+    costDrivers:["LME brass/zinc price","USD/BDT","YKK global pricing power"],
+    currentPrice:"$0.30-2.50/unit (zipper type dependent)",
+  },
+  {
+    id:"f_trim_labels", from:"trim_labels", to:"midasia",
+    material:"Labels, Barcodes, Packaging",
+    hs:"5807.00/4821.00", unit:"per garment",
+    fromName:"Midasia Label Unit (Own)", toName:"Midasia Garment",
+    tariff:"N/A (captive, intra-group)",
+    compliance:"OEKO-TEX 100. GOTS labels. GS1 barcode compliance.",
+    costDrivers:["Paper price (USD-denominated import)","Captive = full utilization efficiency"],
+    currentPrice:"$0.05-0.20/garment",
+    riskFlags:["Midasia's own label unit = competitive advantage vs factories outsourcing labels"],
+  },
+  {
+    id:"f_trim_chemicals", from:"trim_chemicals", to:"midasia",
+    material:"Wash Chemicals & Dyes",
+    hs:"3204/3208", unit:"kg",
+    fromName:"Huntsman/DyStar via agents", toName:"Midasia Wash",
+    tariff:"Specialty chemicals: 0-5% BD import duty",
+    compliance:"ZDHC MRSL (mandatory for EU buyer programs). REACH. OEKO-TEX 100. bluesign.",
+    costDrivers:["Crude oil (chemical feedstock)","China chemical export policy","USD/BDT"],
+    currentPrice:"Varies by chemical type; indigo ~$3-5/kg, enzymes ~$5-15/kg",
+    riskFlags:["ZDHC compliance mandatory for H&M, Primark, Lidl — Midasia Wash must maintain full ZDHC MMS Level 3"],
+  },
+  // Midasia → Logistics
+  {
+    id:"f_garment_export", from:"midasia", to:"log_midasia",
+    material:"Finished Garments (packed, labeled, in cartons)",
+    hs:"61/62 (knit/woven)", unit:"dozens / pcs",
+    fromName:"Midasia Factory", toName:"Midasia C&F (Own)",
+    tariff:"FOB terms — Midasia responsible up to port of loading",
+    compliance:"BL (Bill of Lading). Packing list. Commercial invoice. Certificate of Origin (EUR.1 for GSP+ EU; Form E for GSP+ generalized).",
+    costDrivers:["FOB price (negotiated with buyer)","Factory handling and loading","Documentation costs"],
+    currentPrice:"FOB denim jeans: $8-18/dozen; woven shirts: $6-14/dozen (Sep 2026)",
+  },
+  // Logistics → Buyers
+  {
+    id:"f_log_eu", from:"log_carriers", to:"buyer_primark",
+    material:"FOB Shipment to EU Port",
+    hs:"61/62", unit:"TEU / shipment",
+    fromName:"Ocean Carriers", toName:"EU Buyers (Primark, Lidl, H&M, C&A)",
+    tariff:"EU: 0% MFN duty for BD garments under EBA (Everything But Arms). Post-LDC: 9-12% MFN tariff applies (post-2029).",
+    compliance:"EU REACH. EU Textile Labeling Regulation 1007/2011. CSDDD due diligence (from 2027). ENS (Entry Summary Declaration).",
+    costDrivers:["Ocean freight: $600-900/TEU Asia-EU Mediterranean","SCFI elevated ~3,000+","GSP+ Certificate of Origin cost","EU port handling"],
+    currentPrice:"Ocean freight: $0.40-0.80/kg Asia-EU",
+    riskFlags:["LDC graduation post-2029: 9-12% MFN tariff will apply unless GSP+ secured","India-EU FTA ~2028: India gains EU access — BD loses EBA moat","CSDDD 2027: full supply chain traceability documentation required by EU buyers NOW"],
+  },
+  {
+    id:"f_log_apac", from:"log_carriers", to:"buyer_apac",
+    material:"FOB Shipment to APAC",
+    hs:"61/62", unit:"TEU / shipment",
+    fromName:"Ocean Carriers", toName:"APAC Buyers",
+    tariff:"APAC: generally MFN tariffs (Australia ~0-5%, Japan ~5-10%, Korea ~8-13%); no LDC-equivalent preference",
+    compliance:"AU Mandatory Standard. Japan JIS labeling. APAC RSL per buyer.",
+    costDrivers:["Ocean freight: Singapore ~12 days, Australia ~18 days, Tokyo ~14 days","Air freight available for urgent APAC orders via Dhaka airport"],
+    currentPrice:"Sea freight: $0.35-0.70/kg to APAC ports",
+  },
+];
+
+// ── RENDER ───────────────────────────────────────────────────────────────────
+
+const svg = d3.select("#canvas");
+let zoom, g;
+const w = () => document.querySelector(".canvas-wrap").clientWidth;
+const h = () => document.querySelector(".canvas-wrap").clientHeight;
+
+const STAGES = ["Raw Material","Spinning","Weaving","Trim & Components","Manufacturing","Logistics","Buyer"];
+const STAGE_COLS = ["#10b981","#06b6d4","#3b82f6","#f59e0b","#f97316","#475569","#10b981"];
+
+function stageXPos(stage) {
+  const i = STAGES.indexOf(stage);
+  return (i + 0.5) * (w() / STAGES.length);
+}
+
+function nodeX(n) { return stageXPos(n.stage) + (n.x - 0.5) * 70; }
+function nodeY(n) { return 80 + n.y * (h() - 140); }
+function nodeR(n) {
+  const base = n.isCentral ? 38 : 18;
+  const m = {3:0.7,4:0.8,5:0.9,6:1.0,7:1.15,8:1.3,9:1.45,10:1.6};
+  return base * (m[n.power]||1);
+}
+
+function init() {
+  const cw = w(), ch = h();
+  svg.attr("width",cw).attr("height",ch).selectAll("*").remove();
+
+  const defs = svg.append("defs");
+  defs.append("marker").attr("id","arr").attr("markerWidth",7).attr("markerHeight",5)
+    .attr("refX",16).attr("refY",2.5).attr("orient","auto")
+    .append("polygon").attr("points","0 0,7 2.5,0 5").attr("fill","#2d4060");
+  defs.append("marker").attr("id","arr-sel").attr("markerWidth",7).attr("markerHeight",5)
+    .attr("refX",16).attr("refY",2.5).attr("orient","auto")
+    .append("polygon").attr("points","0 0,7 2.5,0 5").attr("fill","#f97316");
+
+  const flt = defs.append("filter").attr("id","glow");
+  flt.append("feGaussianBlur").attr("stdDeviation","5").attr("result","blur");
+  const fm = flt.append("feMerge");
+  fm.append("feMergeNode").attr("in","blur");
+  fm.append("feMergeNode").attr("in","SourceGraphic");
+
+  zoom = d3.zoom().scaleExtent([0.25,2.5])
+    .on("zoom", e => g.attr("transform", e.transform));
+  svg.call(zoom);
+  g = svg.append("g");
+
+  drawLanes();
+  drawFlows();
+  drawNodes();
+}
+
+function drawLanes() {
+  const cw = w(), ch = h();
+  STAGES.forEach((s,i) => {
+    const x = i * (cw/STAGES.length);
+    const lw = cw/STAGES.length;
+    const col = STAGE_COLS[i];
+    g.append("rect").attr("x",i===0?0:x-lw/2).attr("y",0)
+      .attr("width",lw+(i===0?lw/2:0)+(i===STAGES.length-1?lw/2:0)).attr("height",ch)
+      .attr("fill",col).attr("opacity",0.05).attr("rx",0);
+    if(i>0) g.append("line").attr("x1",x).attr("y1",0).attr("x2",x).attr("y2",ch)
+      .attr("stroke","#1e2d45").attr("stroke-width",1).attr("stroke-dasharray","4,4");
+    g.append("rect").attr("x",x-lw/2+4).attr("y",6).attr("width",lw-8).attr("height",20)
+      .attr("fill",col).attr("opacity",0.1).attr("rx",5);
+    g.append("text").attr("x",x).attr("y",20).attr("text-anchor","middle")
+      .attr("font-size","9px").attr("font-weight","700").attr("fill",col)
+      .attr("letter-spacing","0.06em").text(s.toUpperCase());
+  });
+}
+
+function drawFlows() {
+  FLOWS.forEach(f => {
+    const fn = NODES.find(n=>n.id===f.from), tn = NODES.find(n=>n.id===f.to);
+    if(!fn||!tn) return;
+    const x1=nodeX(fn),y1=nodeY(fn),x2=nodeX(tn),y2=nodeY(tn);
+    const r1=nodeR(fn),r2=nodeR(tn);
+    const ang=Math.atan2(y2-y1,x2-x1);
+    const ex1=x1+r1*Math.cos(ang),ey1=y1+r1*Math.sin(ang);
+    const ex2=x2-(r2+22)*Math.cos(ang),ey2=y2-(r2+22)*Math.sin(ang);
+    const mx=(ex1+ex2)/2,my=(ey1+ey2)/2;
+    const px=-(ey2-ey1)*0.06,py=(ex2-ex1)*0.06;
+
+    g.append("path")
+      .attr("d",`M${ex1},${ey1} Q${mx+px},${my+py} ${ex2},${ey2}`)
+      .attr("stroke","#243350").attr("stroke-width",1.8).attr("fill","none")
+      .attr("marker-end","url(#arr)").attr("opacity",0.65)
+      .attr("cursor","pointer")
+      .on("click",()=>showFlow(f))
+      .on("mouseenter",function(){
+        d3.select(this).attr("stroke","#f97316").attr("marker-end","url(#arr-sel)").attr("opacity",1).attr("stroke-width",2.5);
+        showTT(mx,my,f.material,"Material","medium");
+      })
+      .on("mouseleave",function(){
+        d3.select(this).attr("stroke","#243350").attr("marker-end","url(#arr)").attr("opacity",0.65).attr("stroke-width",1.8);
+        hideTT();
+      });
+
+    // Material chip
+    const chip=g.append("g").attr("transform",`translate(${mx},${my})`).attr("cursor","pointer")
+      .on("click",()=>showFlow(f))
+      .on("mouseenter",function(){
+        d3.select(this).select("rect").attr("fill","#c084fc28").attr("stroke","#c084fc");
+        showTT(mx,my-28,f.material,"Material","medium");
+      })
+      .on("mouseleave",function(){
+        d3.select(this).select("rect").attr("fill","#c084fc12").attr("stroke","#c084fc50");
+        hideTT();
+      });
+    const label=f.material.length>11?f.material.slice(0,10)+"…":f.material;
+    const tw=Math.max(50,label.length*5.5+16);
+    chip.append("rect").attr("x",-tw/2).attr("y",-10).attr("width",tw).attr("height",20)
+      .attr("rx",10).attr("fill","#c084fc12").attr("stroke","#c084fc50").attr("stroke-width",1);
+    chip.append("text").attr("text-anchor","middle").attr("y",4)
+      .attr("font-size","9px").attr("font-weight","600").attr("fill","#c084fc").text(label);
+  });
+}
+
+function drawNodes() {
+  NODES.forEach(n => {
+    const cx=nodeX(n),cy=nodeY(n),r=nodeR(n);
+    const ng=g.append("g").attr("transform",`translate(${cx},${cy})`).attr("cursor","pointer")
+      .on("click",()=>showNode(n))
+      .on("mouseenter",function(){
+        showTT(cx,cy-r-12,n.name,n.stage,n.risk);
+        d3.select(this).select(".nc").attr("stroke-width",n.isCentral?4:3).attr("filter","url(#glow)");
+      })
+      .on("mouseleave",function(){
+        hideTT();
+        d3.select(this).select(".nc").attr("stroke-width",n.isCentral?3:2).attr("filter",n.isCentral?"url(#glow)":null);
+      });
+
+    if(n.isCentral){
+      ng.append("circle").attr("r",r+10).attr("fill","none").attr("stroke",n.color)
+        .attr("stroke-width",1.5).attr("opacity",0.3).attr("stroke-dasharray","5,3");
+      ng.append("circle").attr("r",r+16).attr("fill","none").attr("stroke",n.color)
+        .attr("stroke-width",1).attr("opacity",0.15).attr("stroke-dasharray","2,4");
+    }
+    ng.append("circle").attr("r",r).attr("fill",n.isCentral?n.color:`${n.color}22`)
+      .attr("stroke",n.color).attr("stroke-width",n.isCentral?3:2)
+      .attr("filter",n.isCentral?"url(#glow)":null).attr("class","nc");
+
+    if(!n.isCentral){
+      ng.append("circle").attr("cx",r-5).attr("cy",-r+5).attr("r",5.5)
+        .attr("fill",RISK_COL[n.risk]).attr("stroke","#090d18").attr("stroke-width",1.5);
+    }
+    ng.append("text").attr("text-anchor","middle").attr("y",r+13)
+      .attr("font-size","9px").attr("font-weight","700")
+      .attr("fill",n.isCentral?"#fff":"#c8d5e8")
+      .text(n.name.length>16?n.name.slice(0,15)+"…":n.name);
+    if(n.isCentral) ng.append("text").attr("text-anchor","middle").attr("y",r+25)
+      .attr("font-size","8px").attr("fill",n.color).attr("font-weight","600")
+      .text("★ SUPPLIER");
+  });
+}
+
+// ── PANEL ────────────────────────────────────────────────────────────────────
+function closePanel(){document.getElementById("detailPanel").classList.add("closed");}
+
+function showNode(n){
+  const p=document.getElementById("detailPanel");p.classList.remove("closed");
+  document.getElementById("pStage").textContent=n.stage;
+  const sc=STAGE_COLOR[n.stage]||"#64748b";
+  document.getElementById("pStage").style.background=`${sc}22`;document.getElementById("pStage").style.color=sc;
+  document.getElementById("pType").textContent="Player";document.getElementById("pType").className="ptype player";
+  document.getElementById("pTitle").textContent=n.name;
+  const d=n.detail;let h="";
+  // power
+  h+=`<div class="ps">Bargaining Power</div>`;
+  h+=`<div class="power-wrap"><div class="power-bar"><div class="power-fill" style="width:${n.power*10}%;background:${sc}"></div></div><span style="font-size:11px;color:${sc};font-weight:700">${n.power}/10</span></div>`;
+  // risk
+  h+=`<div class="ps">Risk Level</div>`;
+  h+=`<div class="risk-pips">${[1,2,3].map(i=>`<div class="pip ${i<=RISK_PIPS[n.risk]?'on '+n.risk[0]:''}"></div>`).join("")}</div>`;
+  h+=`<div style="font-size:10px;color:${RISK_COL[n.risk]};margin-bottom:4px">${n.risk.toUpperCase()} RISK</div>`;
+  // air8
+  if(d.air8){
+    h+=`<div class="air8-alert"><div class="air8-alert-title">🤖 Air8 Intelligence</div>`;
+    const a=d.air8;
+    h+=`<div class="ir"><div class="ik">Client ID</div><div class="iv">${a.clientId} · ${a.combo}</div></div>`;
+    h+=`<div class="ir"><div class="ik">Rev Band</div><div class="iv">${a.revenueBand}</div></div>`;
+    h+=`<div class="ir"><div class="ik">Adv Ratio</div><div class="iv">${a.advanceRatio}</div></div>`;
+    h+=`<div class="ir"><div class="ik">Key Mon.</div><div class="iv">${a.keyMonitors}</div></div>`;
+    h+=`<div class="ir"><div class="ik">WC Pinch</div><div class="iv">${a.wcPinch}</div></div>`;
+    h+=`</div>`;
+  }
+  // description
+  if(d.description){h+=`<div class="ps">Overview</div><div class="iv" style="font-size:11px;line-height:1.6">${d.description}</div>`;}
+  // products (midasia)
+  if(d.products){h+=`<div class="ps">Products</div>`;d.products.forEach(p=>{
+    h+=`<div style="margin-bottom:7px;background:var(--el);border:1px solid var(--bd);border-radius:8px;padding:8px 10px">`;
+    h+=`<div style="font-size:11px;font-weight:700;color:#f1f5f9">${p.cat} <span style="font-size:9px;background:#f9731620;color:#fb923c;padding:1px 6px;border-radius:10px">${p.share}</span></div>`;
+    h+=`<div style="font-size:11px;color:var(--mt);margin-top:3px">${p.items.join(" · ")}</div></div>`;
+  });}
+  // compliance
+  if(d.compliance&&d.compliance.length){h+=`<div class="ps">Compliance</div><div class="tag-row">${d.compliance.map(c=>`<span class="tag bl">${c}</span>`).join("")}</div>`;}
+  // cost drivers
+  if(d.costDrivers&&d.costDrivers.length){h+=`<div class="ps">Cost Drivers</div>`;d.costDrivers.forEach(c=>h+=`<div class="ir"><div class="ik">→</div><div class="iv" style="font-size:11px">${c}</div></div>`);}
+  // risk flags
+  if(d.riskFlags&&d.riskFlags.length){h+=`<div class="ps">⚠️ Risk Flags</div>`;d.riskFlags.forEach(r=>h+=`<div class="tag-row" style="margin-bottom:4px"><span class="tag rd">⚠ ${r}</span></div>`);}
+  // recent events
+  if(d.recentEvents&&d.recentEvents.length){h+=`<div class="ps">Recent Events</div>`;d.recentEvents.forEach(e=>h+=`<div class="ev"><span class="ev-sev ${e.sev}">${e.sev==="h"?"HIGH":e.sev==="m"?"MED":"LOW"}</span><div class="ev-date">${e.date}</div><div class="ev-text">${e.text}</div></div>`);}
+  // buyer profile
+  if(d.buyerProfile){h+=`<div class="ps">Buyer Profile</div>`;const bp=d.buyerProfile;
+    [["Spend on BD",bp.spendOnBD],["Model",bp.model],["Payment",bp.payment],["Price Pressure",bp.pricePressure]].forEach(([k,v])=>{if(v) h+=`<div class="ir"><div class="ik">${k}</div><div class="iv">${v}</div></div>`;});
+    if(bp.requirements){h+=`<div class="ps" style="margin-top:8px">Requirements</div><div class="tag-row">${bp.requirements.map(r=>`<span class="tag bl">${r}</span>`).join("")}</div>`;}
+  }
+  // impact on midasia
+  if(d.impactOnMidasia){h+=`<div class="ps">💥 Impact on Midasia</div><div style="background:#ef444410;border:1px solid #ef444430;border-radius:8px;padding:10px;font-size:11px;line-height:1.6">${d.impactOnMidasia}</div>`;}
+  document.getElementById("pBody").innerHTML=h;
+  document.getElementById("pBody").scrollTop=0;
+}
+
+function showFlow(f){
+  const p=document.getElementById("detailPanel");p.classList.remove("closed");
+  document.getElementById("pStage").textContent="Flow";
+  document.getElementById("pStage").style.background="#c084fc22";
+  document.getElementById("pStage").style.color="#c084fc";
+  document.getElementById("pType").textContent="Material";
+  document.getElementById("pType").className="ptype material";
+  document.getElementById("pTitle").textContent=f.material;
+  const fn=f.fromName||f.from,tn=f.toName||f.to;
+  let h=`<div class="flow-summary"><span style="font-size:11px;color:#60a5fa;font-weight:600">${fn}</span><span class="flow-arrow">→</span><span style="font-size:11px;color:#34d399;font-weight:600">${tn}</span></div>`;
+  if(f.hs)     h+=`<div class="ps">HS Code</div><div class="ir"><div class="ik">Code</div><div class="iv" style="font-family:monospace;font-size:11px">${f.hs}</div></div>`;
+  if(f.unit)   h+=`<div class="ps">Unit</div><div class="ir"><div class="ik">Unit</div><div class="iv">${f.unit}</div></div>`;
+  if(f.tariff) h+=`<div class="ps">Tariff & Trade</div><div class="iv" style="background:#3b82f610;border:1px solid #3b82f630;border-radius:8px;padding:10px;font-size:11px;line-height:1.6">${f.tariff}</div>`;
+  if(f.compliance) h+=`<div class="ps">Compliance</div><div class="iv" style="font-size:11px;line-height:1.6">${f.compliance}</div>`;
+  if(f.costDrivers&&f.costDrivers.length){h+=`<div class="ps">Cost Drivers</div>`;f.costDrivers.forEach(c=>h+=`<div class="ir"><div class="ik">→</div><div class="iv" style="font-size:11px">${c}</div></div>`);}
+  if(f.currentPrice) h+=`<div class="ps">Indicative Price</div><div class="ir"><div class="ik">Market</div><div class="iv" style="font-weight:600;color:#f1f5f9">${f.currentPrice}</div></div>`;
+  if(f.riskFlags&&f.riskFlags.length){h+=`<div class="ps">⚠️ Risk</div>`;f.riskFlags.forEach(r=>h+=`<div class="tag-row" style="margin-bottom:4px"><span class="tag rd">⚠ ${r}</span></div>`);}
+  document.getElementById("pBody").innerHTML=h;
+  document.getElementById("pBody").scrollTop=0;
+}
+
+// ── TOOLTIP ──────────────────────────────────────────────────────────────────
+function showTT(x,y,name,stage,risk){
+  const tt=document.getElementById("tooltip");
+  document.getElementById("ttName").textContent=name;
+  document.getElementById("ttStage").textContent=stage;
+  document.getElementById("ttRisk").innerHTML=`<span style="color:${RISK_COL[risk]};font-size:10px">${risk.toUpperCase()} RISK</span>`;
+  tt.style.left=(x-80)+"px";tt.style.top=(y-50)+"px";
+  tt.classList.add("visible");
+}
+function hideTT(){document.getElementById("tooltip").classList.remove("visible");}
+
+// ── ZOOM ─────────────────────────────────────────────────────────────────────
+function zoomIn(){svg.transition().duration(300).call(zoom.scaleBy,1.3);}
+function zoomOut(){svg.transition().duration(300).call(zoom.scaleBy,0.75);}
+function resetView(){svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity);}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+window.addEventListener("resize",init);
+init();
+</script>
+</body>
+</html>
