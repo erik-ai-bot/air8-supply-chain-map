@@ -231,6 +231,7 @@ h1 { font-size:17px; font-weight:800; color:#f1f5f9; letter-spacing:-0.02em; }
   <div class="li"><div class="ln amb"></div><span>Trim/Chemicals</span></div>
   <div class="li"><div class="ln org"></div><span>MIDASIA</span></div>
   <div class="li"><div class="ln gry"></div><span>Logistics</span></div>
+  <div class="li" style="display:flex;align-items:center;gap:5px"><div style="width:13px;height:13px;border-radius:50%;background:#0891b2;border:2px solid #22d3ee"></div><span>Import/Trade</span></div>
   <div class="li"><div class="ln grn"></div><span>Buyers</span></div>
   <div class="lsep"></div>
   <span class="lbl">Risk</span>
@@ -274,13 +275,14 @@ h1 { font-size:17px; font-weight:800; color:#f1f5f9; letter-spacing:-0.02em; }
 // ── DATA ──────────────────────────────────────────────────────────────────────
 
 const STAGE_COLOR = {
-  "Raw Material":     "#10b981",
-  "Spinning":        "#06b6d4",
-  "Weaving":         "#3b82f6",
-  "Trim & Components":"#f59e0b",
-  "Manufacturing":    "#f97316",
-  "Logistics":       "#475569",
-  "Buyer":           "#10b981",
+  "Raw Material":      "#10b981",
+  "Spinning":          "#06b6d4",
+  "Weaving":           "#3b82f6",
+  "Trim & Components": "#f59e0b",
+  "Manufacturing":     "#f97316",
+  "Logistics":         "#475569",
+  "Import/Trade":      "#0891b2",
+  "Buyer":             "#10b981",
 };
 
 const RISK_COL  = { high: "#ef4444", medium: "#f59e0b", low: "#10b981" };
@@ -605,6 +607,81 @@ const NODES = [
       ],
     }
   },
+  // ── IMPORT/TRADE (destination logistics) ─────────────────────────────
+  {
+    id:"eu_port", stage:"Import/Trade", x:0.5, y:0.1,
+    name:"EU Port + Customs",
+    subtitle:"Rotterdam / Hamburg / Antwerp — EU entry + import clearance",
+    type:"player", risk:"medium", power:6, color:"#0891b2",
+    detail:{
+      description:"EU destination ports handle the vast majority of BD garment imports. Rotterdam (world's #1 EU port, ~14M TEU/yr) and Hamburg are primary for Primark, Lidl, H&M. EU Customs clearance: import entry (CN code), EBA/GSP+ preferential origin check (EUR.1 certificate), REACH substance screening, import VAT & duty calculation.",
+      whatTheyDo:"Port handling, berth allocation, container unstuffing, customs clearance, import declaration (SAD), release of goods to importer.",
+      compliance:["EU Union Customs Code (UCC 2016)","EBA/GSP+ EUR.1 Certificate of Origin — 0% duty for BD garments","REACH Regulation — substance registration at import","EU ICS2 Phase 3 (Import Control System) — pre-arrival safety filing 24h before loading","EU Textiles Regulation 1007/2011 — labeling (fiber content, country of origin)","Potential CBAM expansion to textiles (under review 2026)"],
+      costDrivers:["Rotterdam terminal handling: ~€120-180/TEU","Customs broker fee: €150-400 per import entry","EU import VAT (19-21% in DE/NL — refunded to VAT-registered importer)","Demurrage: €25-60/day after 5-7 days free time","Tariff: currently 0% EBA; post-2029 MFN 9-12% risk"],
+      riskFlags:[
+        "LDC graduation: post-2029 MFN tariff 9-12% on BD garments unless GSP+ secured — this port is where the tariff bill lands",
+        "EU ICS2: incomplete pre-arrival filing = release delay = buyer penalty claims",
+        "CBAM expansion: if textiles included, additional carbon levy at border (2026+ monitoring)",
+      ],
+      recentEvents:[
+        {date:"2025",text:"EU ICS2 Phase 3 fully live — all BD-EU garment shipments require pre-arrival safety data 24h before vessel loading",sev:"m"},
+        {date:"2026",text:"EU Commission reviewing CBAM expansion to textiles — no decision yet; watch list",sev:"m"},
+        {date:"2026",text:"Rotterdam port congestion eased after post-COVID peak; average dwell time 3-4 days (down from 6-7 in 2024)",sev:"l"},
+      ],
+    }
+  },
+  {
+    id:"air_freight", stage:"Import/Trade", x:0.5, y:0.32,
+    name:"Air Freight",
+    subtitle:"Dhaka → EU/APAC — urgent orders, 2-3 days vs 25-35 sea",
+    type:"player", risk:"low", power:4, color:"#f59e0b",
+    detail:{
+      description:"Air freight for urgent replenishment orders, samples, and high-value fashion pieces. Dhaka Hazrat Shahjalal International Airport (DAC) is BD's main air cargo hub. Key carriers: Qatar Airways Cargo (strongest capacity), Biman Bangladesh Airlines, Emirates SkyCargo, Lufthansa Cargo. Transit: 2-3 days to EU vs 25-35 days sea.",
+      whatTheyDo:"Express cargo uplift, airmail, courier (DHL/FedEx/UPS), dangerous goods handling.",
+      compliance:["IATA Dangerous Goods Regulations (DGR) — some wash chemicals may classify as hazardous","EU/US pre-loading air cargo security (PLACI — pre-loading advance cargo information)","Same customs compliance as sea import — faster processing only"],
+      costDrivers:["Air freight rate: $3.50-6.00/kg BD→EU (vs $0.40-0.80/kg sea)","Peak season surcharge: Oct-Jan rates can be 2x base","Security surcharge: $0.20-0.40/kg","Fuel surcharge (Brent crude-linked)"],
+      riskFlags:[
+        "Air freight is 5-8x more expensive than sea — only viable for urgent orders; regular use = margin destruction",
+        "Air cargo space constrained Oct-Jan (pre-Christmas) — capacity must be booked weeks ahead",
+      ],
+      recentEvents:[
+        {date:"2026",text:"Air cargo capacity from BD tightened — Biman added 2 freighter rotations to EU on Primark/H&M urgent demand",sev:"l"},
+        {date:"2026",text:"Air freight rates BD→EU at $4.20/kg (up from $3.50 in 2024) on global capacity tightening",sev:"m"},
+      ],
+    }
+  },
+  {
+    id:"eu_import_agent", stage:"Import/Trade", x:0.5, y:0.54,
+    name:"EU Import Agent / 3PL",
+    subtitle:"DSV, Kuehne+Nagel, Ligentia — customs clearance + DC delivery",
+    type:"player", risk:"low", power:5, color:"#0891b2",
+    detail:{
+      description:"EU-side freight forwarders and 3PLs manage end-to-end import: customs clearance at EU port, VAT filing, inland transport (port → buyer DC), bonded warehouse if needed, and returns handling. Key players: DSV Panalpina (Denmark — Primark's preferred), Kuehne+Nagel (Switzerland — H&M preferred), Ligentia (fashion specialist), DHL Supply Chain EU.",
+      whatTheyDo:"EU import customs clearance, duty + VAT payment (recovered from buyer), inland transport (port → buyer distribution center), returns handling.",
+      compliance:["EU AEO (Authorized Economic Operator) — reduces customs inspection rate to <1%","GDPR (shipment data handling)","Road transport compliance (EU tachograph, driver hours)","CMR (Convention on the Contract for the Carriage of Goods by Road)"],
+      costDrivers:["Customs broker fee: €150-300 per shipment entry","Inland road freight (Rotterdam → Primark Dublin DC: €900-1,400/truck)","Warehousing at DC gateway: €0.80-1.50/m² per day","Diesel price (EU road transport — high carbon levy in NL, DE)"],
+      recentEvents:[
+        {date:"2026",text:"EU truck driver shortage pushing inland freight rates 8% above 2025 — Primark DC delivery lead times extended",sev:"m"},
+        {date:"2025",text:"DSV integrated Ligentia fashion division — now end-to-end fashion logistics specialist",sev:"l"},
+      ],
+    }
+  },
+  {
+    id:"apac_port", stage:"Import/Trade", x:0.5, y:0.78,
+    name:"APAC Port + Customs",
+    subtitle:"Singapore / Fremantle / Tokyo — APAC entry + clearance",
+    type:"player", risk:"low", power:5, color:"#3b82f6",
+    detail:{
+      description:"APAC destination ports for Midasia's secondary market. Singapore (transshipment hub — fastest clearance ~1-2 days), Fremantle/Sydney (Australia — strict biosecurity), Yokohama/Tokyo (Japan — JIS labeling verification). Each market has different customs + compliance requirements.",
+      whatTheyDo:"Port handling, customs clearance, biosecurity inspection (Australia), import duty collection, goods release.",
+      compliance:["Australia: DAFF biosecurity — no contamination (soil, seeds); 100% inspection risk if non-AEP","Japan: Household Goods Quality Labeling Act — JIS labeling in Japanese mandatory","Singapore: MAS Customs — free port, minimal duty, fast clearance","AU Mandatory Standard on consumer product safety (flammability etc.)"],
+      costDrivers:["APAC port handling: S$80-150/TEU (Singapore); AUD 150-250/TEU (Fremantle)","Australia import duty: 0-5% MFN","Japan import duty: 5-10% MFN","Australia biosecurity inspection fee: AUD 100-300/consignment","Inland delivery to buyer DC: AUD 500-900 (Sydney area)"],
+      recentEvents:[
+        {date:"2025",text:"Australia DAFF biosecurity inspection backlog increased — average 2-3 day delay above normal",sev:"l"},
+        {date:"2026",text:"Singapore port maintained top-5 global ranking — reliable 1-2 day customs clearance",sev:"l"},
+      ],
+    }
+  },
   // ── BUYERS ────────────────────────────────────────────────────────────
   {
     id:"buyer_primark", stage:"Buyer", x:6, y:0.15,
@@ -864,27 +941,83 @@ const FLOWS = [
     costDrivers:["FOB price (negotiated with buyer)","Factory handling and loading","Documentation costs"],
     currentPrice:"FOB denim jeans: $8-18/dozen; woven shirts: $6-14/dozen (Sep 2026)",
   },
-  // Logistics → Buyers
+  // Export Logistics → Import/Trade nodes
   {
-    id:"f_log_eu", from:"log_carriers", to:"buyer_primark",
-    material:"FOB Shipment to EU Port",
-    hs:"61/62", unit:"TEU / shipment",
-    fromName:"Ocean Carriers", toName:"EU Buyers (Primark, Lidl, H&M, C&A)",
-    tariff:"EU: 0% MFN duty for BD garments under EBA (Everything But Arms). Post-LDC: 9-12% MFN tariff applies (post-2029).",
-    compliance:"EU REACH. EU Textile Labeling Regulation 1007/2011. CSDDD due diligence (from 2027). ENS (Entry Summary Declaration).",
-    costDrivers:["Ocean freight: $600-900/TEU Asia-EU Mediterranean","SCFI elevated ~3,000+","GSP+ Certificate of Origin cost","EU port handling"],
-    currentPrice:"Ocean freight: $0.40-0.80/kg Asia-EU",
-    riskFlags:["LDC graduation post-2029: 9-12% MFN tariff will apply unless GSP+ secured","India-EU FTA ~2028: India gains EU access — BD loses EBA moat","CSDDD 2027: full supply chain traceability documentation required by EU buyers NOW"],
+    id:"f_sea_eu", from:"log_carriers", to:"eu_port",
+    material:"Ocean FCL — BD → EU Port",
+    hs:"61/62", unit:"TEU (20ft/40ft)",
+    fromName:"Ocean Carriers (Maersk/MSC)", toName:"Rotterdam / Hamburg",
+    tariff:"BD garments enter EU under EBA (0% MFN duty). Certificate EUR.1 or GSP+ Form A required. Post-2029 LDC graduation: 9-12% MFN tariff unless GSP+ retained.",
+    compliance:"EU ICS2 Phase 3 (pre-arrival safety filing 24h before loading). Vessel ISPS compliance. IMO CII carbon intensity rating. BL + packing list + commercial invoice.",
+    costDrivers:["SCFI Asia-EU Mediterranean: $600-900/TEU (elevated from ~$300 trough 2024)","Fuel surcharge (BAF — Brent crude linked)","IMO CII carbon intensity surcharge (2023+)","Canal fees: Suez Canal transit ~$300-500/TEU","Transit time: Chittagong → Rotterdam ~21-25 days"],
+    currentPrice:"Ocean freight ~$0.40-0.80/kg Asia-EU; $600-900/TEU all-in (Sep 2026)",
+    riskFlags:["Suez Canal risk: Red Sea attacks in 2024 forced Cape rerouting (+12-15 days + $1,500/TEU cost)","LDC graduation: 9-12% tariff will be assessed AT THIS PORT post-2029 if no GSP+"],
   },
   {
-    id:"f_log_apac", from:"log_carriers", to:"buyer_apac",
-    material:"FOB Shipment to APAC",
-    hs:"61/62", unit:"TEU / shipment",
-    fromName:"Ocean Carriers", toName:"APAC Buyers",
-    tariff:"APAC: generally MFN tariffs (Australia ~0-5%, Japan ~5-10%, Korea ~8-13%); no LDC-equivalent preference",
-    compliance:"AU Mandatory Standard. Japan JIS labeling. APAC RSL per buyer.",
-    costDrivers:["Ocean freight: Singapore ~12 days, Australia ~18 days, Tokyo ~14 days","Air freight available for urgent APAC orders via Dhaka airport"],
-    currentPrice:"Sea freight: $0.35-0.70/kg to APAC ports",
+    id:"f_sea_apac", from:"log_carriers", to:"apac_port",
+    material:"Ocean FCL — BD → APAC Port",
+    hs:"61/62", unit:"TEU",
+    fromName:"Ocean Carriers", toName:"Singapore / Fremantle / Tokyo",
+    tariff:"APAC MFN tariffs: Australia 0-5%, Japan 5-10%, Korea 8-13%, Singapore 0%. No LDC-equivalent zero-rate for BD in APAC.",
+    compliance:"Country-specific customs declarations. Australia: DAFF biosecurity declaration. Japan: JIS labeling verification. Singapore: MAS Customs advance cargo declaration.",
+    costDrivers:["Ocean freight: Singapore $400-600/TEU; Australia $600-900/TEU; Japan $700-1,000/TEU","Transit times: Singapore 12 days, Fremantle 18 days, Tokyo 14 days","Carrier fuel surcharges"],
+    currentPrice:"Sea freight BD→APAC: $0.35-0.70/kg",
+  },
+  {
+    id:"f_air_urgent", from:"log_midasia", to:"air_freight",
+    material:"Air Cargo — Urgent Orders",
+    hs:"61/62", unit:"kg / AWB",
+    fromName:"Midasia C&F (Factory)", toName:"Dhaka Airport (DAC)",
+    tariff:"Same EBA/MFN rates apply — just faster customs processing at destination. Air freight value declared on air waybill.",
+    compliance:"IATA DGR (if any hazardous materials in shipment). PLACI pre-loading cargo info. CITES if any restricted materials (unlikely for garments).",
+    costDrivers:["Dhaka airport cargo handling: $0.15-0.30/kg","Air waybill documentation fee","Factory-to-airport trucking (Mirpur to DAC: ~45 min, $20-40)"],
+    currentPrice:"Air freight rate BD→EU: $4.20-6.00/kg all-in (Sep 2026); BD→Singapore: $2.50-3.50/kg",
+    riskFlags:["Air freight cost = 5-8x sea freight — using air for regular orders = ~8-15% margin erosion"],
+  },
+  {
+    id:"f_eu_port_to_agent", from:"eu_port", to:"eu_import_agent",
+    material:"Cleared Goods Release",
+    hs:"61/62", unit:"container / truck",
+    fromName:"Rotterdam / Hamburg Port", toName:"EU Import Agent / 3PL",
+    tariff:"Post-clearance release. Import VAT paid at port (refunded to VAT-registered buyer). No further duty.",
+    compliance:"CMR (road transport). EU Tachograph compliance (driver hours). GDPR (shipment data).",
+    costDrivers:["Port storage: €25-60/day after free time","Container haulage (port → warehouse/DC): €400-900 per move in NL/DE/UK","Unstuffing + palletizing: €150-300 per container"],
+    currentPrice:"Drayage Rotterdam → Primark NL DC: €500-700; Hamburg → Lidl DC: €400-600",
+  },
+  {
+    id:"f_agent_to_buyer_eu", from:"eu_import_agent", to:"buyer_primark",
+    material:"Goods Delivery → Buyer DC",
+    hs:"61/62", unit:"carton / truck",
+    fromName:"EU Import Agent (3PL)", toName:"EU Buyers (Primark / Lidl / H&M / C&A)",
+    tariff:"DDP (Delivered Duty Paid) or DAP — duty already cleared. Final delivery to buyer's distribution center.",
+    compliance:"EU Textiles Labeling (fiber content, country of origin on every garment). Buyer-specific DC requirements (labeling, hangers, packing). CSDDD traceability documentation.",
+    costDrivers:["Last-mile DC delivery: €200-600 per truck depending on distance","DC handling fee (buyer charges): €0.15-0.40/unit","Returns handling: 5-15% return rate for fashion","Buyer-imposed quality inspection at DC (random sampling)"],
+    currentPrice:"Total EU landed cost vs FOB: +12-18% for freight, port, agent, DC delivery combined",
+    riskFlags:[
+      "LDC post-2029: 9-12% MFN tariff added at EU port = total landed cost +20-30% vs current",
+      "Buyer DC rejection: if quality fails at DC, cost of return and rework is borne by Midasia",
+    ],
+  },
+  {
+    id:"f_air_to_eu", from:"air_freight", to:"eu_import_agent",
+    material:"Air Shipment Cleared → DC",
+    hs:"61/62", unit:"kg / pallet",
+    fromName:"Air Freight (EU Airport)", toName:"EU Import Agent",
+    tariff:"Same EBA 0% duty applies for air-freighted BD garments.",
+    compliance:"EU air cargo customs clearance. Same REACH/labeling/CSDDD compliance. Faster clearance: typically 4-8 hours at EU airport.",
+    costDrivers:["Air import handling fee: €0.30-0.60/kg at EU airport","Airport-to-DC truck: €200-500"],
+    currentPrice:"Air freight total EU landed cost vs FOB: +400-500% vs sea freight equivalent",
+    riskFlags:["Only viable for top-margin products or genuine emergency orders"],
+  },
+  {
+    id:"f_apac_to_buyer", from:"apac_port", to:"buyer_apac",
+    material:"Cleared Goods → APAC DC",
+    hs:"61/62", unit:"container / truck",
+    fromName:"APAC Port + Customs", toName:"APAC Buyers (Target AU / Kmart / UNIQLO)",
+    tariff:"APAC MFN duties applied at port. Australia: 0-5%; Japan: 5-10%. No LDC preference.",
+    compliance:"AU Mandatory Standard. Japan Household Goods Act. Buyer DC requirements per APAC buyer.",
+    costDrivers:["AU inland freight (Fremantle → Sydney DC): AUD 2,500-4,000/truck","Japan DC delivery (Tokyo/Osaka)","AU import duty (if applicable): 0-5% on FOB value","Returns handling (AU: lower return rate than EU fashion)"],
+    currentPrice:"Total APAC landed cost: +15-22% above FOB for freight, duty, port, delivery",
   },
 ];
 
@@ -895,15 +1028,15 @@ let zoom, g;
 const w = () => document.querySelector(".canvas-wrap").clientWidth;
 const h = () => document.querySelector(".canvas-wrap").clientHeight;
 
-const STAGES = ["Raw Material","Spinning","Weaving","Trim & Components","Manufacturing","Logistics","Buyer"];
-const STAGE_COLS = ["#10b981","#06b6d4","#3b82f6","#f59e0b","#f97316","#475569","#10b981"];
+const STAGES = ["Raw Material","Spinning","Weaving","Trim & Components","Manufacturing","Logistics","Import/Trade","Buyer"];
+const STAGE_COLS = ["#10b981","#06b6d4","#3b82f6","#f59e0b","#f97316","#475569","#0891b2","#10b981"];
 
 function stageXPos(stage) {
   const i = STAGES.indexOf(stage);
   return (i + 0.5) * (w() / STAGES.length);
 }
 
-function nodeX(n) { return stageXPos(n.stage) + (n.x - 0.5) * 70; }
+function nodeX(n) { return stageXPos(n.stage); } // nodes centered in stage column; y drives vertical layout
 function nodeY(n) { return 80 + n.y * (h() - 140); }
 function nodeR(n) {
   const base = n.isCentral ? 38 : 18;
