@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Midasia — Supply Chain Intelligence Map · Sep 2026</title>
+<title>COMBO-002 · BD Denim RMG — Supply Chain Intelligence · Sep 2026</title>
 <style>
 :root {
   --bg:#090d18; --sf:#0f1628; --el:#162035; --bd:#1e2d47;
@@ -209,17 +209,16 @@ h1 { font-size:17px; font-weight:800; color:#f1f5f9; letter-spacing:-0.02em; }
 <header>
   <div style="display:flex;align-items:center;gap:10px">
     <div class="brand-dot"></div>
-    <h1>Midasia Fashions Ltd / Midasia Group</h1>
+    <h1>BD Denim RMG — Supply Chain Intelligence</h1>
   </div>
-  <div class="header-meta">Supply Chain Map · Sep 2026</div>
-  <div class="hstat">Denim <span class="hstat-val">60%</span></div>
-  <div class="hstat">Non-Denom <span class="hstat-val">40%</span></div>
-  <div class="hstat">Workers <span class="hstat-val">4,800</span></div>
-  <div class="hstat">Lines <span class="hstat-val">36</span></div>
+  <div class="header-meta">COMBO-002 · Bangladesh · Sep 2026</div>
+  <div class="hstat">Segment <span class="hstat-val">Denim 60% / Woven 40%</span></div>
+  <div class="hstat">Market <span class="hstat-val">EU primary · APAC secondary</span></div>
+  <div class="hstat">~<span class="hstat-val">800-1,000</span> BD factories in segment</div>
   <div class="header-badges">
-    <span class="badge eu">🇪🇺 EU Primary</span>
-    <span class="badge ap">🌏 APAC Secondary</span>
-    <span class="badge rg">⚠️ LDC + India-EU FTA</span>
+    <span class="badge eu">🇪🇺 EBA 0% → LDC risk 2029</span>
+    <span class="badge ap">🌏 APAC · MFN tariffs</span>
+    <span class="badge rg">⚠️ India-EU FTA · UFLPA · Wage +56%</span>
   </div>
 </header>
 
@@ -510,14 +509,14 @@ const NODES = [
   },
   // ── MIDASIA (CENTER) ──────────────────────────────────────────────────
   {
-    id:"midasia", stage:"Manufacturing", x:4, y:0.5,
-    name:"Midasia Group Manufacturing",
-    subtitle:"Denim 60% · Woven 40% · Women/Men/Kids · EU Primary · APAC Secondary",
+    id:"midasia", stage:"Manufacturing", x:0.5, y:0.5,
+    name:"BD Denim RMG Factory",
+    subtitle:"COMBO-002 · Bangladesh · Denim 60% / Woven 40% · EU + APAC · ~800-1,000 factories in segment",
     type:"player", risk:"high", power:3, color:"#f97316",
     isCentral:true,
     detail:{
-      description:"Midasia Group (Mirpur, Dhaka, est. 1992) is a vertically integrated RMG manufacturer. 4,800 workers, 36 production lines, 1.4M pcs/month capacity. Owns: garment factory, washing (2.5M pcs/month wet+dry, has ETP), embroidery, screen print, dry process (laser/enzyme/ozone), label printing, C&F logistics. 60% denim (jeans, pants, shorts, overalls), 40% non-denim (shirts, blouses, jackets). Women/men/kids. Air8 client: C0001130, COMBO-002.",
-      whatTheyDo:"CMT (Cut-Make-Trim) and FOB garment manufacturing. Full package orders. In-house washing, embellishment, and logistics.",
+      description:"COMBO-002 profile: Bangladesh-based denim + woven RMG manufacturers targeting EU and APAC markets. Typical size: 1,000–5,000 workers, 10–40 production lines, 0.3–1.5M pcs/month. Product mix: ~60% denim (jeans, shorts, overalls), ~40% non-denim (shirts, blouses, jackets). FOB model. Many factories vertically integrated with in-house washing, finishing, and C&F logistics. ~4,500 export-oriented garment factories in Bangladesh; ~800–1,000 in the denim/woven EU-APAC segment. Risks and compliance requirements shown here apply to ALL factories in this segment.",
+      whatTheyDo:"CMT and FOB garment manufacturing. Denim: cut-wash-finish (stone wash, enzyme, laser, ozone). Non-denim: shirt/blouse/jacket cut-and-sew. Key segment characteristic: buyer-nominated fabric (~90% of programs) — factories absorb all wage/overhead increases without input offset.",
       products:[
         {cat:"Denim Bottom Wear", items:["Jeans","Denim pants","Denim shorts","Denim overalls","Denim caprices"], share:"~60%"},
         {cat:"Non-Denom Bottom", items:["Basic pants","Shorts","Caprices","Overalls","Pyjama sets"], share:"~20%"},
@@ -527,7 +526,7 @@ const NODES = [
       compliance:["BSCI / SEDEX SMETA (buyer qualification standard)","OEKO-TEX Standard 100","REACH","GOTS (if organic product)","RSC (Bangladesh Factory Safety)","ZDHC (washing facility)","CSDDD traceability (2026-27 EU buyer requirement)","UFLPA (if US-bound shipments)","CA Prop 65"],
       costDrivers:["Labor cost (post-56% minimum wage hike 2024)","Fabric/yarn (buyer-nominated — Midasia bears wage without offset)","Energy (electricity + diesel backup)","Bank LC cost (3-5% + 45-60 day processing)","Working capital (90-120 day cycle + 30% prepay at booking)"],
       riskFlags:[
-        "BUYER-NOMINATED FABRIC (~90%): Midasia does NOT choose fabric source — bears wage costs without raw material arbitrage benefit",
+        "BUYER-NOMINATED FABRIC (~90%): Factories in this segment do NOT choose fabric source — bears wage costs without raw material arbitrage benefit",
         "EU LDC Graduation (Nov 2026 → EBA expiry post-2029): 9-12% MFN tariff threatens EU price competitiveness",
         "India-EU FTA (Jan 2026): India gains EU preferential access ~2028 — eliminates BD's EBA competitive moat",
         "US Tariff 19% (Feb 2026 BD-US deal): BD export prices down 2.26% YoY in 7M 2026 — factories absorbing tariff burden",
@@ -535,16 +534,16 @@ const NODES = [
         "CSDDD Traceability Gap: EU buyers requiring 2-3 years ahead of 2029 deadline — documentation infrastructure likely insufficient",
         "UFLPA US exposure: China-origin yarn/fabric used for any US buyer orders = CBP detention risk",
         "Political instability: Hartals = 15-20 lost production days/year",
-        "Working capital: 90-120 day cycle + 30% prepay = acute WC pinch; Air8 ARP product directly addresses this",
+        "Working capital: 90-120 day cycle + 30% prepay = acute WC pinch ACROSS THIS SEGMENT; Air8 ARP/PRESHIP-RT2C directly addresses this",
       ],
       air8:{
-        clientId:"C0001130",
-        combo:"COMBO-002",
-        revenueBand:"<$5M",
-        type:"FOB",
+        clientId:"COMBO-002 — segment-level",
+        combo:"BD Denim RMG · EU/APAC target markets",
+        revenueBand:"$2M–20M typical; Air8 clients vary",
+        type:"FOB (majority of segment)",
         advanceRatio:"Normal 80%, alert at 70% (2+ deteriorating signals same quarter)",
-        keyMonitors:"PO volume trend (top 2 EU buyers), payment speed, factory utilization, LDC graduation buyer pre-positioning",
-        wcPinch:"90-120 day cash cycle + 30% prepay at order booking = acute WC need; ARP and PRESHIP-RT2C directly fit",
+        keyMonitors:"PO volume trend (top 2 EU buyers), payment speed, factory utilisation, LDC buyer pre-positioning signals, UFLPA compliance",
+        wcPinch:"90-120 day cycle + 30% prepay = acute WC need for every factory at every order. Segment-wide pattern — ARP and PRESHIP-RT2C fit perfectly.",
       },
       recentEvents:[
         {date:"Nov 2026",text:"LDC Graduation trigger — EU EBA clock starts. Post-2029 MFN tariff 9-12% threatens EU competitiveness.",sev:"h"},
@@ -1172,7 +1171,7 @@ function drawNodes() {
       .text(n.name.length>16?n.name.slice(0,15)+"…":n.name);
     if(n.isCentral) ng.append("text").attr("text-anchor","middle").attr("y",r+25)
       .attr("font-size","8px").attr("fill",n.color).attr("font-weight","600")
-      .text("★ SUPPLIER");
+      .text("★ COMBO-002");
   });
 }
 
