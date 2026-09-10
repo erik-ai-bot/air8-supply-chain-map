@@ -1,0 +1,292 @@
+<!-- 
+  ═══════════════════════════════════════════════════════
+  EMBEDDABLE KB WIDGETS — insert into BanaToys × Ross report
+  Design language matches original report exactly.
+  Three widgets: KB-A (buyer geo concentration), KB-B (compliance rings)
+  Usage: paste inside existing .sec card, replace placeholder
+  ═══════════════════════════════════════════════════════
+-->
+
+<style>
+/* widget-only styles — no conflicts with host page */
+.kb-w .don{position:relative;width:80px;height:80px;flex:none}
+.kb-w .don svg{transform:rotate(-90deg)}
+.kb-w .don .bg{fill:none;stroke:var(--sunken);stroke-width:9}
+.kb-w .don .s{fill:none;stroke-width:9;stroke-linecap:round}
+.kb-w .don .txt{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.kb-w .don .pct{font:800 16px var(--display);letter-spacing:-.02em;color:var(--ink)}
+.kb-w .don .lbl{font:600 8.5px var(--body);color:var(--faint)}
+.kb-w .chip{padding:2px 8px;border-radius:999px;font:700 10px var(--body);white-space:nowrap;display:inline-block}
+.kb-w .crow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
+.kb-w .crow:last-child{border-bottom:0}
+.kb-w .flag{font-size:15px;line-height:1;flex:none}
+.kb-w .crow .l{flex:1;font:600 12px var(--body)}
+.kb-w .crow .v{font:700 11.5px var(--mono);color:var(--ink);white-space:nowrap}
+.kb-w .exp{border:1.5px dashed var(--line2);border-radius:12px;padding:11px 14px;margin-top:12px;background:var(--sunken);cursor:pointer;user-select:none}
+.kb-w .exphd{display:flex;align-items:center;gap:8px;font:600 11.5px var(--body);color:var(--muted)}
+.kb-w .exp .arr{transition:transform .2s;font-size:12px}
+.kb-w .exp.open .arr{transform:rotate(90deg)}
+.kb-w .expcon{display:none;margin-top:0}
+.kb-w .exp.open .expcon{display:block}
+.kb-w .ctable{width:100%;border-collapse:collapse}
+.kb-w .ctable th{text-align:left;font:600 9.5px var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);padding:0 8px 7px 0;border-bottom:1px solid var(--line)}
+.kb-w .ctable td{padding:7px 8px 7px 0;border-bottom:1px solid var(--line);font:500 12px var(--body);vertical-align:middle}
+.kb-w .ctable tr:last-child td{border-bottom:0}
+.kb-w .ctable .val{font:700 12.5px var(--mono)}
+.kb-w .pill{display:inline-flex;align-items:center;gap:4px;font:600 10.5px var(--body);padding:3px 9px;border-radius:999px}
+.kb-w .pill.r{background:var(--risk-soft);color:var(--risk)}.kb-w .pill.w{background:var(--warn-soft);color:var(--warn)}
+.kb-w .pill.g{background:var(--good-soft);color:var(--good)}.kb-w .pill.b{background:var(--blue-soft);color:var(--blue)}
+.kb-w .bar-row{display:grid;grid-template-columns:80px 1fr 48px;gap:8px;align-items:center}
+.kb-w .bar-h{height:10px;border-radius:5px;background:var(--sunken);overflow:hidden}
+.kb-w .bar-h i{display:block;height:100%;border-radius:5px}
+.kb-w .bar-v{font:700 11px var(--mono)}
+.kb-w .gtip{position:absolute;z-index:200;background:var(--ink);color:var(--bg);font:500 11.5px/1.55 var(--body);padding:9px 12px;border-radius:9px;max-width:230px;pointer-events:none;box-shadow:0 12px 32px rgba(0,0,0,.25);display:none}
+.kb-w .gtip.vis{display:block}
+.kb-w [data-tip]:hover{opacity:.88}
+</style>
+
+<div class="kb-w">
+
+<!-- ═══ KB-A: BUYER GEO CONCENTRATION ═══ -->
+<!-- Place inside the #buyers section, replacing or supplementing the country table -->
+<div class="card" style="margin-top:0">
+  <h3>Buyer concentration — geographic risk</h3>
+  <p class="sub">BanaToys's 24 buyers, by market · hover each ring for detail</p>
+
+  <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+    <!-- donut -->
+    <div class="don">
+      <svg width="80" height="80" viewBox="0 0 80 80">
+        <circle class="bg" cx="40" cy="40" r="31"/>
+        <circle class="s" cx="40" cy="40" r="31" stroke="var(--blue)"   stroke-dasharray="65 129" stroke-dashoffset="0"/>
+        <circle class="s" cx="40" cy="40" r="31" stroke="var(--warn)"   stroke-dasharray="37 157" stroke-dashoffset="-65"/>
+        <circle class="s" cx="40" cy="40" r="31" stroke="var(--teal)"   stroke-dasharray="13 181" stroke-dashoffset="-102"/>
+        <circle class="s" cx="40" cy="40" r="31" stroke="var(--line2)"  stroke-dasharray="7 188"  stroke-dashoffset="-115"/>
+      </svg>
+      <div class="txt"><span class="pct">55%</span><span class="lbl">NL</span></div>
+    </div>
+
+    <!-- country rows -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:5px;min-width:180px">
+      <div class="crow" data-tip="Action ($8M) + Toi-Toys ($5M) — both Netherlands-based. One policy, FX, or retailer event hits both simultaneously.">
+        <span class="flag">🇳🇱</span>
+        <span class="l">Netherlands</span>
+        <span class="chip" style="background:var(--blue-soft);color:var(--blue)">55%</span>
+      </div>
+      <div class="crow" data-tip="Ross ($850K) + Walgreens ($1.5M) — different regulatory regime, different FX exposure. Ross is A-rated.">
+        <span class="flag">🇺🇸</span>
+        <span class="l">United States</span>
+        <span class="chip" style="background:var(--warn-soft);color:var(--warn)">31%</span>
+      </div>
+      <div class="crow">
+        <span class="flag">🇪🇸</span>
+        <span class="l">Spain</span>
+        <span class="chip" style="background:var(--teal-soft);color:var(--teal)">4%</span>
+      </div>
+      <div class="crow">
+        <span class="flag">🌐</span>
+        <span class="l">Others · 14 markets</span>
+        <span class="chip" style="background:var(--sunken);color:var(--faint)">10%</span>
+      </div>
+    </div>
+
+    <!-- top-2 callout -->
+    <div style="flex:none;width:120px;text-align:center;padding:10px 12px;border-radius:13px;background:var(--risk-soft);border:1px solid rgba(200,53,43,.2)">
+      <div style="font:800 22px var(--display);color:var(--risk);letter-spacing:-.02em">2</div>
+      <div style="font:600 10px var(--body);color:var(--risk);margin-top:2px">buyers = 55%</div>
+      <div style="font:500 10px var(--body);color:var(--muted);margin-top:3px">same country</div>
+    </div>
+  </div>
+
+  <!-- payment behaviour comparison -->
+  <div style="margin-top:14px;padding-top:13px;border-top:1px solid var(--line)">
+    <div style="font:600 10px var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-bottom:9px">Payment behaviour — EU vs US buyers</div>
+    <div style="display:grid;grid-template-columns:80px 1fr 48px;gap:8px;align-items:center;margin-bottom:6px">
+      <span style="font:600 12px var(--body)">Action</span>
+      <div class="bar-h"><i style="width:72%;background:var(--blue);display:block;height:100%;border-radius:5px"></i></div>
+      <span class="bar-v">~50d</span>
+    </div>
+    <div style="display:grid;grid-template-columns:80px 1fr 48px;gap:8px;align-items:center;margin-bottom:6px">
+      <span style="font:600 12px var(--body)">Toi-Toys</span>
+      <div class="bar-h"><i style="width:66%;background:var(--blue);display:block;height:100%;border-radius:5px"></i></div>
+      <span class="bar-v">~45d</span>
+    </div>
+    <div style="display:grid;grid-template-columns:80px 1fr 48px;gap:8px;align-items:center;margin-bottom:6px">
+      <span style="font:600 12px var(--body)">Ross</span>
+      <div class="bar-h"><i style="width:52%;background:var(--teal);display:block;height:100%;border-radius:5px"></i></div>
+      <span class="bar-v" style="color:var(--good)">8d late</span>
+    </div>
+    <div style="display:grid;grid-template-columns:80px 1fr 48px;gap:8px;align-items:center">
+      <span style="font:600 12px var(--body)">Walgreens</span>
+      <div class="bar-h"><i style="width:60%;background:var(--teal);display:block;height:100%;border-radius:5px"></i></div>
+      <span class="bar-v">~42d</span>
+    </div>
+  </div>
+
+  <!-- expandable: NL risk context -->
+  <div class="exp" onclick="this.classList.toggle('open')">
+    <div class="exphd"><span class="arr">▸</span>Why Netherlands is the real risk, not Ross</div>
+    <div class="expcon">
+      <div style="font:500 12px/1.6 var(--body);color:var(--muted);margin-top:8px">
+        <b style="color:var(--ink)">Three things move Action and Toi-Toys together:</b><br>
+        <b>Consumer cycle.</b> Same Benelux value consumer — one recession, both contract.<br>
+        <b>EUR/USD FX.</b> Both pay in EUR. 10% USD strengthening = direct margin hit for BanaToys with no offset.<br>
+        <b>EU Toy Safety Directive.</b> NL is one of the most active enforcers at EU border — random sampling rate is above EU average.<br><br>
+        Ross, by contrast, is <b style="color:var(--ink)">A-rated, US-domiciled, and less than 1% of BanaToys's book.</b> The credit risk in this relationship runs the other way.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ KB-B: COMPLIANCE RINGS ═══ -->
+<!-- Place inside the #compliance section, replacing the existing cert matrix -->
+<div class="card" style="margin-top:0">
+  <h3>Compliance — what BanaToys needs per market</h3>
+  <p class="sub">same factory, two regulatory worlds · hover ring for full requirements · click to expand</p>
+
+  <!-- rings row -->
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:4px;justify-content:center">
+
+    <!-- Ross / US -->
+    <div style="text-align:center;cursor:pointer" onclick="this.querySelector('.exp').classList.toggle('open')"
+      data-tip="Ross/US: CPSC + ASTM F963 required. Prop 65 likely needed if sold in California. BSCI optional for Ross.">
+      <div style="width:72px;height:72px;border-radius:50%;position:relative;display:grid;place-items:center;margin:0 auto 7px;
+        background:conic-gradient(from -90deg,var(--good) 0 70%,var(--sunken) 70% 100%)">
+        <div style="position:absolute;inset:8px;border-radius:50%;background:var(--surface)"></div>
+        <span style="position:relative;z-index:1;font:800 14px var(--display);color:var(--ink)">Ross</span>
+      </div>
+      <div style="font:600 10.5px var(--body);color:var(--muted)">🇺🇸 US</div>
+      <div style="font:500 10px var(--body);color:var(--good)">✓ mostly ok</div>
+    </div>
+
+    <!-- Action / NL -->
+    <div style="text-align:center;cursor:pointer" onclick="this.querySelector('.exp').classList.toggle('open')"
+      data-tip="Action/NL: EN 71 + CE marking required. REACH/phthalates is the critical gap. BSCI common. Factory visit/audit typical.">
+      <div style="width:72px;height:72px;border-radius:50%;position:relative;display:grid;place-items:center;margin:0 auto 7px;
+        background:conic-gradient(from -90deg,var(--warn) 0 50%,var(--sunken) 50% 100%)">
+        <div style="position:absolute;inset:8px;border-radius:50%;background:var(--surface)"></div>
+        <span style="position:relative;z-index:1;font:800 13px var(--display);color:var(--ink)">Action</span>
+      </div>
+      <div style="font:600 10.5px var(--body);color:var(--muted)">🇳🇱 NL</div>
+      <div style="font:500 10px var(--body);color:var(--warn)">⚠ REACH gap</div>
+    </div>
+
+    <!-- Toi-Toys / NL -->
+    <div style="text-align:center;cursor:pointer" onclick="this.querySelector('.exp').classList.toggle('open')"
+      data-tip="Toi-Toys/NL: Same EU framework as Action. EN 71 + CE required. No confirmed cert on file — all status unknown.">
+      <div style="width:72px;height:72px;border-radius:50%;position:relative;display:grid;place-items:center;margin:0 auto 7px;
+        background:conic-gradient(from -90deg,var(--risk) 0 35%,var(--sunken) 35% 100%)">
+        <div style="position:absolute;inset:8px;border-radius:50%;background:var(--surface)"></div>
+        <span style="position:relative;z-index:1;font:800 11px var(--display);color:var(--ink)">Toi-<br>Toys</span>
+      </div>
+      <div style="font:600 10.5px var(--body);color:var(--muted)">🇳🇱 NL</div>
+      <div style="font:500 10px var(--body);color:var(--risk)">✗ not sighted</div>
+    </div>
+
+    <!-- ECI / ES -->
+    <div style="text-align:center;cursor:pointer" onclick="this.querySelector('.exp').classList.toggle('open')"
+      data-tip="El Corte Inglés/ES: EN 71 + CE marking required. Same EU framework. $1M / 4% of book — smaller but same compliance burden.">
+      <div style="width:72px;height:72px;border-radius:50%;position:relative;display:grid;place-items:center;margin:0 auto 7px;
+        background:conic-gradient(from -90deg,var(--warn) 0 40%,var(--sunken) 40% 100%)">
+        <div style="position:absolute;inset:8px;border-radius:50%;background:var(--surface)"></div>
+        <span style="position:relative;z-index:1;font:800 12px var(--display);color:var(--ink)">ECI</span>
+      </div>
+      <div style="font:600 10.5px var(--body);color:var(--muted)">🇪🇸 ES</div>
+      <div style="font:500 10px var(--body);color:var(--warn)">⚠ unknown</div>
+    </div>
+
+    <!-- EU standard -->
+    <div style="text-align:center" data-tip="EU Toy Safety Directive 2009/48/EC: the baseline for all EU markets. EN 71 (mechanical, flammability, chemical) + CE marking required. REACH: phthalates ≤0.1% each for DINP/DIDP/DNHP.">
+      <div style="width:72px;height:72px;border-radius:50%;position:relative;display:grid;place-items:center;margin:0 auto 7px;
+        background:conic-gradient(from -90deg,var(--teal) 0 60%,var(--sunken) 60% 100%)">
+        <div style="position:absolute;inset:8px;border-radius:50%;background:var(--surface)"></div>
+        <span style="position:relative;z-index:1;font:800 11px var(--display);line-height:1.2">EU<br>standard</span>
+      </div>
+      <div style="font:600 10.5px var(--body);color:var(--muted)">🇪🇺 all EU</div>
+      <div style="font:500 10px var(--body);color:var(--teal)">EN 71 + CE</div>
+    </div>
+
+    <!-- US standard -->
+    <div style="text-align:center" data-tip="US: CPSC + ASTM F963 (mandatory federal toy safety standard). Prop 65 for California — labelling required if any chemical exposure above threshold. ISO 8124 covered by ASTM F963 equivalence.">
+      <div style="width:72px;height:72px;border-radius:50%;position:relative;display:grid;place-items:center;margin:0 auto 7px;
+        background:conic-gradient(from -90deg,var(--blue) 0 75%,var(--sunken) 75% 100%)">
+        <div style="position:absolute;inset:8px;border-radius:50%;background:var(--surface)"></div>
+        <span style="position:relative;z-index:1;font:800 11px var(--display);line-height:1.2">US<br>standard</span>
+      </div>
+      <div style="font:600 10.5px var(--body);color:var(--muted)">🇺🇸 US</div>
+      <div style="font:500 10px var(--body);color:var(--blue)">CPSC + F963</div>
+    </div>
+  </div>
+
+  <!-- colour key -->
+  <div style="display:flex;gap:14px;flex-wrap:wrap;font:500 10.5px var(--body);color:var(--faint);margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)">
+    <span style="display:flex;align-items:center;gap:5px">
+      <i style="width:10px;height:10px;border-radius:50%;background:var(--good);display:inline-block"></i> confirmed on file
+    </span>
+    <span style="display:flex;align-items:center;gap:5px">
+      <i style="width:10px;height:10px;border-radius:50%;background:var(--warn);display:inline-block"></i> likely needed — status unknown
+    </span>
+    <span style="display:flex;align-items:center;gap:5px">
+      <i style="width:10px;height:10px;border-radius:50%;background:var(--risk);display:inline-block"></i> gap — not sighted
+    </span>
+    <span style="display:flex;align-items:center;gap:5px">
+      <i style="width:10px;height:10px;border-radius:50%;background:var(--teal);display:inline-block"></i> regulatory standard
+    </span>
+  </div>
+
+  <!-- expandable: phthalates deep dive -->
+  <div class="exp" onclick="this.classList.toggle('open')">
+    <div class="exphd"><span class="arr">▸</span>The one thing that breaks EU compliance — phthalates</div>
+    <div class="expcon">
+      <div style="font:500 12px/1.65 var(--body);color:var(--muted);margin-top:8px">
+        <b style="color:var(--ink)">Phthalates</b> are the #1 EU通关 rejection trigger for injection-moulded plastic toys.
+        EU limits DEHP, DBP, BBP to <b style="color:var(--ink)">≤0.1% each</b> — a hard limit. US CPSC has no equivalent; it uses voluntary guidance + Prop 65 CA exposure thresholds.<br><br>
+        <b style="color:var(--ink)">Same pellets, same mould, two specs.</b> One non-compliant resin batch flags the EU SKU at border while the US SKU sails through.
+        The risk lives <b style="color:var(--ink)">upstream of BanaToys</b> — at the PP/AS resin supplier. Factory QC cert is meaningless if the input material is non-compliant.<br><br>
+        <b style="color:var(--ink)">Fix cost:</b> ~$200–400 per SKU for a full REACH/phthalates test. One test covers the whole HS 9503 pretend-play line.
+        One factory visit to audit the resin supplier list closes the material-layer gap permanently.
+      </div>
+    </div>
+  </div>
+
+  <!-- expandable: what "confirmed" actually means here -->
+  <div class="exp" onclick="this.classList.toggle('open')">
+    <div class="exphd"><span class="arr">▸</span>What the compliance rings show — and what they don't</div>
+    <div class="expcon">
+      <div style="font:500 12px/1.65 var(--body);color:var(--muted);margin-top:8px">
+        <b style="color:var(--ink)">"Not sighted"</b> means just that — we have not seen the document in BanaToys's file.
+        It does not mean the document does not exist.<br>
+        The factory certifies more than appears in our record; each such item is a <b style="color:var(--ink)">question to ask</b>, not a finding against BanaToys.<br><br>
+        The most important open questions for this supplier:<br>
+        <b>①</b> Has BanaToys been tested at the <b>resin input level</b> for phthalates, or only at the finished-goods level?<br>
+        <b>②</b> Does the CE mark on file cover the <b>specific HS 9503 SKU</b> shipped to Action/Toi-Toys, or a broader product range?<br>
+        <b>③</b> Is there a <b>BSCI or amfori BSCI</b> audit on file? (Factory social audit — common NL buyer requirement)
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /kb-w -->
+
+<script>
+(function(){
+  var d=document;
+  d.querySelectorAll('.kb-w [data-tip]').forEach(function(el){
+    el.addEventListener('mouseenter',function(){
+      d.querySelectorAll('.gtip').forEach(function(g){g.remove();});
+      var g=d.createElement('div');g.className='gtip vis';
+      g.innerHTML=el.getAttribute('data-tip');
+      d.body.appendChild(g);
+    });
+    el.addEventListener('mouseleave',function(){
+      var g=d.querySelector('.gtip');
+      if(g){g.classList.remove('vis');setTimeout(function(){if(g.parentNode)g.remove();},150);}
+    });
+  });
+  d.addEventListener('mousemove',function(e){
+    var g=d.querySelector('.gtip');
+    if(g){g.style.left=e.clientX+14+'px';g.style.top=e.clientY-10+'px';}
+  });
+})();
+</script>
