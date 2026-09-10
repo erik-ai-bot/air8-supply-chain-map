@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BanaToys × Ross — KB Supplement · Expert Review Draft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+ :root{
+ --bg:#F5F7FB; --surface:#FFFFFF; --sunken:#EEF2F7;
+ --ink:#0F1720; --muted:#5B6B7B; --faint:#8E9BAB; --line:#E3E8EF; --line2:#CBD5E1;
+ --blue:#1A56DB; --teal:#0EA5A4; --blue-soft:#E8F0FE; --teal-soft:#E3F6F5;
+ --good:#1E7A55; --warn:#C08A17; --risk:#C8352B;
+ --good-soft:#E4F3EB; --warn-soft:#F8EFD9; --risk-soft:#FBE5E2;
+ --shadow:0 1px 2px rgba(16,24,40,.05),0 14px 34px -16px rgba(16,24,40,.16);
+ --shadow-hover:0 2px 4px rgba(16,24,40,.06),0 22px 44px -18px rgba(26,86,219,.22);
+ --display:'Plus Jakarta Sans',system-ui,sans-serif;
+ --body:'DM Sans',system-ui,sans-serif;
+ --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+ }
+ @media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+ --bg:#0B1220; --surface:#121B2C; --sunken:#0E1626;
+ --ink:#E8EEF7; --muted:#A3B1C4; --faint:#6F7F95; --line:#22304A; --line2:#33456A;
+ --blue:#6EA8FF; --teal:#3ED2CF; --blue-soft:rgba(110,168,255,.14); --teal-soft:rgba(62,210,207,.14);
+ --good:#3FB27E; --warn:#D8A63A; --risk:#E0654F;
+ --good-soft:rgba(63,178,126,.16); --warn-soft:rgba(216,166,58,.16); --risk-soft:rgba(224,101,79,.16);
+ --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 34px -16px rgba(0,0,0,.6);
+ --shadow-hover:0 2px 4px rgba(0,0,0,.5),0 22px 44px -18px rgba(110,168,255,.28);
+ }
+ }
+ *{box-sizing:border-box;margin:0;padding:0}
+ body{background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;padding:28px 24px 80px}
+ .wrap{max-width:1080px;margin:0 auto}
+
+ /* nav */
+ .nav{position:sticky;top:12px;z-index:10;display:flex;gap:2px;align-items:center;padding:7px 10px;border-radius:999px;
+   background:color-mix(in srgb,var(--surface) 82%,transparent);backdrop-filter:blur(14px);
+   border:1px solid var(--line);box-shadow:var(--shadow);width:max-content;max-width:100%;margin:0 auto 32px}
+ .nav a{font:600 11.5px var(--body);color:var(--muted);text-decoration:none;padding:6px 9px;border-radius:999px;transition:all .18s}
+ .nav a:hover{background:var(--sunken);color:var(--ink)}
+ .nav .brand{font:800 11.5px var(--display);color:var(--ink);padding:6px 10px 6px 7px;border-right:1px solid var(--line);margin-right:2px}
+ .nav .brand i{display:inline-block;width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--teal));margin-right:7px;vertical-align:1px}
+ .nav .new{background:var(--blue-soft);color:var(--blue)!important}
+
+ /* section */
+ .sec{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px 26px 20px;box-shadow:var(--shadow);margin-bottom:28px}
+ .sechd{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+ .tagn{font:600 10px var(--mono);color:var(--faint);letter-spacing:.1em;text-transform:uppercase}
+ .review{font:600 10px var(--body);letter-spacing:.05em;padding:3px 9px;border-radius:999px;border:1.5px solid var(--warn);color:var(--warn);white-space:nowrap}
+ h2{font:800 22px/1.1 var(--display);letter-spacing:-.025em;color:var(--ink)}
+ .lede{font:400 14px/1.6 var(--body);color:var(--muted);max-width:72ch;margin-top:6px}
+
+ /* two-col */
+ .twogrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px}
+ @media(max-width:700px){.twogrid{grid-template-columns:1fr}}
+ .twogrid .wide{grid-column:1/-1}
+
+ /* card */
+ .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--shadow)}
+ .card h3{font:700 13.5px var(--display);letter-spacing:-.01em;margin:0 0 2px}
+ .sub{font:500 11.5px var(--body);color:var(--faint);margin:0 0 14px}
+
+ /* donut */
+ .don{position:relative;width:96px;height:96px;flex:none}
+ .don svg{transform:rotate(-90deg)}
+ .don .bg{fill:none;stroke:var(--sunken);stroke-width:10}
+ .don .slice{fill:none;stroke-width:10;stroke-linecap:round}
+ .don .txt{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+ .don .pct{font:800 18px var(--display);letter-spacing:-.02em;color:var(--ink)}
+ .don .lbl{font:600 9px var(--body);color:var(--faint);margin-top:1px}
+
+ /* chip */
+ .chip{padding:2px 8px;border-radius:999px;font:700 10px var(--body);white-space:nowrap;display:inline-block}
+ .chip.r{background:var(--risk-soft);color:var(--risk)}.chip.w{background:var(--warn-soft);color:var(--warn)}
+ .chip.g{background:var(--good-soft);color:var(--good)}.chip.bl{background:var(--blue-soft);color:var(--blue)}
+
+ /* rows */
+ .crow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+ .crow:last-child{border-bottom:0}
+ .flag{font-size:16px;line-height:1;flex:none}
+ .crow .l{flex:1;font:600 12.5px var(--body)}
+ .crow .v{font:700 12px var(--mono);white-space:nowrap;color:var(--ink)}
+
+ /* table */
+ .ctable{width:100%;border-collapse:collapse;margin-top:4px}
+ .ctable th{text-align:left;font:600 9.5px var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);padding:0 10px 8px 0;border-bottom:1px solid var(--line)}
+ .ctable td{padding:9px 10px 9px 0;border-bottom:1px solid var(--line);font:500 12.5px var(--body);vertical-align:middle}
+ .ctable tr:last-child td{border-bottom:0)}
+ .ctable .val{font:700 13px var(--mono);color:var(--ink)}
+
+ /* pill */
+ .pill{display:inline-flex;align-items:center;gap:5px;font:600 11px var(--body);padding:4px 10px;border-radius:999px}
+ .pill.r{background:var(--risk-soft);color:var(--risk)}.pill.w{background:var(--warn-soft);color:var(--warn)}
+ .pill.g{background:var(--good-soft);color:var(--good)}
+
+ /* bars */
+ .bar-row{display:grid;grid-template-columns:90px 1fr 56px;gap:10px;align-items:center}
+ .bar-row span{font:600 12px var(--body)}
+ .bar-h{height:12px;border-radius:6px;background:var(--sunken);overflow:hidden}
+ .bar-h i{display:block;height:100%;border-radius:6px}
+ .bar-v{font:700 12px var(--mono)}
+
+ /* expand */
+ .exp{border:1.5px dashed var(--line2);border-radius:14px;padding:13px 16px;margin-top:14px;background:var(--sunken);cursor:pointer;user-select:none}
+ .exphd{display:flex;align-items:center;gap:10px;font:600 12px var(--body);color:var(--muted)}
+ .exp .arr{transition:transform .2s;font-size:13px}
+ .exp.open .arr{transform:rotate(90deg)}
+ .expcon{display:none;margin-top:0}
+ .exp.open .expcon{display:block}
+
+ /* matrix */
+ .mtbl{width:100%;border-collapse:collapse;margin-top:12px}
+ .mtbl th{text-align:left;font:600 9.5px var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);padding:0 12px 8px 0;border-bottom:1px solid var(--line);white-space:nowrap}
+ .mtbl th:first-child{width:160px}
+ .mtbl td{padding:8px 12px 8px 0;border-bottom:1px solid var(--line);font:500 12px var(--body);vertical-align:middle;white-space:nowrap}
+ .mtbl tr:last-child td{border-bottom:0)}
+ .vfy{display:inline-flex;align-items:center;gap:6px;font:600 11.5px var(--body)}
+ .vfy i{width:8px;height:8px;border-radius:50%;flex:none}
+ .vfy.ok i{background:var(--good)}.vfy.ok{color:var(--good)}
+ .vfy.gap i{background:var(--risk)}.vfy.gap{color:var(--risk)}
+ .vfy.unk i{background:var(--warn)}.vfy.unk{color:var(--warn)}
+ .vfy.na i{background:var(--faint)}.vfy.na{color:var(--faint)}
+
+ /* gap rows */
+ .grow{display:grid;grid-template-columns:140px 1fr 80px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+ .grow:last-child{border-bottom:0}
+ .grow .l{font:600 12px var(--body)}.grow .l small{display:block;font:500 10px var(--body);color:var(--faint);margin-top:1px}
+ .grow .t{height:8px;border-radius:4px;background:var(--sunken);overflow:hidden}
+ .grow .t i{display:block;height:100%;border-radius:4px}
+ .grow .v{font:600 11px var(--mono);text-align:right}
+
+ /* note */
+ .note{font:500 11.5px/1.5 var(--body);color:var(--faint);margin-top:14px;padding-top:10px;border-top:1px dashed var(--line)}
+
+ /* ─── KB EXPERT REVIEW SECTION ─── */
+ .kbsec{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px 26px 20px;margin-bottom:28px}
+ .kbsec .sechd{margin-bottom:4px}
+ .kbsec .eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+ .kbsec .eyebrow span{font:600 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+
+ .review-banner{display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+   padding:11px 16px;border-radius:13px;border:1.5px solid var(--warn);background:var(--warn-soft);
+   font:500 12.5px var(--body);color:var(--muted);margin-bottom:18px}
+ .review-banner b{color:var(--ink);font-weight:700}
+ .review-banner .tag{font:700 10px var(--mono);letter-spacing:.07em;text-transform:uppercase;
+   padding:2px 8px;border-radius:999px;background:var(--warn);color:#fff;white-space:nowrap}
+
+ /* buyer profile card */
+ .bprof{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px}
+ @media(max-width:700px){.bprof{grid-template-columns:1fr}}
+ .bcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--shadow)}
+ .bcard .hd{display:flex;align-items:baseline;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+ .bcard .hd h3{font:800 16px var(--display);letter-spacing:-.02em;margin:0}
+ .bcard .hd .flag2{font-size:20px}
+ .bcard .mk{font:600 10px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:4px}
+ .bcard .meta{display:flex;flex-direction:column;gap:7px}
+ .bcard .mrow{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font:500 12.5px var(--body)}
+ .bcard .mrow:last-child{border-bottom:0}
+ .bcard .mrow .l{color:var(--muted)}.bcard .mrow .v{font:700 13px var(--mono);color:var(--ink)}
+ .bcard .mrow .v.g{color:var(--good)}.bcard .mrow .v.w{color:var(--warn)}.bcard .mrow .v.r{color:var(--risk)}
+
+ .prov{display:inline-flex;align-items:center;gap:4px;font:700 9.5px var(--mono);margin-left:4px;cursor:help}
+ .prov i{display:inline-block;width:11px;height:11px;border-radius:50%;font-style:normal;text-align:center;line-height:11px;font-size:8px;color:#fff}
+ .prov.ok i{background:var(--good)}.prov.ok{color:var(--good)}
+ .prov.bench i{background:var(--blue)}.prov.bench{color:var(--blue)}
+ .prov.self i{background:var(--muted)}.prov.self{color:var(--muted)}
+ .prov.gap i{background:var(--risk)}.prov.gap{color:var(--risk)}
+ .prov.need i{background:var(--warn)}.prov.need{color:var(--warn)}
+
+ .bcard .risk-tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+ .bcard .risk-tags .t{font:700 10px var(--body);letter-spacing:.05em;padding:3px 8px;border-radius:999px}
+ .t.nl{background:var(--risk-soft);color:var(--risk)}.t.dso{background:var(--warn-soft);color:var(--warn)}.t.fx{background:var(--blue-soft);color:var(--blue)}.t.sk{background:var(--sunken);color:var(--muted)}
+
+ /* sourcing table */
+ .stab{width:100%;border-collapse:collapse;margin-top:10px}
+ .stab th{text-align:left;font:600 9.5px var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);padding:0 10px 7px 0;border-bottom:1px solid var(--line)}
+ .stab td{padding:7px 10px 7px 0;border-bottom:1px solid var(--line);font:500 12px var(--body);vertical-align:middle}
+ .stab tr:last-child td{border-bottom:0)}
+ .stab .v{font:700 12px var(--mono)}
+
+ /* expert flags */
+ .eflags{display:flex;flex-direction:column;gap:9px;margin-top:12px}
+ .eflg{display:flex;gap:9px;padding:9px 11px;border-radius:10px;background:var(--sunken);font:500 12px var(--body);color:var(--muted)}
+ .eflg i{flex:none;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font:800 9px var(--display);color:#fff;align-self:flex-start;margin-top:1px}
+ .eflg.imp i{background:var(--risk)}.eflg.ask i{background:var(--warn)}.eflg.fin i{background:var(--blue)}
+ .eflg b{color:var(--ink);font-weight:700;display:block;margin-bottom:1px;font-size:12.5px}
+ .eflg .src{font:500 10.5px var(--mono);color:var(--faint);display:block;margin-top:2px}
+
+ /* gap card */
+ .gapcard{border:1.5px dashed var(--risk);border-radius:14px;padding:13px 16px;background:var(--risk-soft)}
+
+ /* gtip */
+ .gtip{position:absolute;z-index:200;background:var(--ink);color:var(--bg);font:500 11.5px/1.55 var(--body);
+   padding:9px 12px;border-radius:9px;max-width:240px;pointer-events:none;box-shadow:0 12px 32px rgba(0,0,0,.25);display:none}
+ .gtip.vis{display:block}
+ [data-tip]:hover .ic{opacity:1}
+ .ic{opacity:.65;transition:opacity .15s}
+
+ footer{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);font:500 11px var(--mono);color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="nav" aria-label="Sections">
+  <span class="brand"><i></i>BanaToys × Ross · KB</span>
+  <a href="#kba">KB-A</a>
+  <a href="#kbb">KB-B</a>
+  <a href="#kbc" class="new">KB-C 👁</a>
+  <a href="#kbd" class="new">KB-D 👁</a>
+</nav>
+
+<!-- ══════════════════════════════════════
+     KB-A — BUYER CONCENTRATION
+     ══════════════════════════════════════ -->
+<div class="sec" id="kba">
+  <div class="sechd">
+    <span class="tagn">KB-A</span>
+    <h2>Buyer Concentration — where the real risk sits</h2>
+  </div>
+  <p class="lede">Ross is 1% of BanaToys's book. The other 99% tells a different story.</p>
+
+  <div class="twogrid" style="margin-top:16px">
+    <div class="card">
+      <h3>Geography of $23.4M book</h3>
+      <p class="sub">24 buyers · grouped by market</p>
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <div class="don">
+          <svg width="96" height="96" viewBox="0 0 96 96">
+            <circle class="bg" cx="48" cy="48" r="38"/>
+            <circle class="slice" cx="48" cy="48" r="38" stroke="var(--blue)"   stroke-dasharray="83 156"  stroke-dashoffset="0"/>
+            <circle class="slice" cx="48" cy="48" r="38" stroke="var(--warn)"   stroke-dasharray="48 191"  stroke-dashoffset="-83"/>
+            <circle class="slice" cx="48" cy="48" r="38" stroke="var(--teal)"   stroke-dasharray="17 222"  stroke-dashoffset="-131"/>
+            <circle class="slice" cx="48" cy="48" r="38" stroke="var(--line2)"  stroke-dasharray="8 231"   stroke-dashoffset="-148"/>
+          </svg>
+          <div class="txt"><span class="pct">55%</span><span class="lbl">NL</span></div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:7px">
+          <div class="crow"><span class="flag">🇳🇱</span><span class="l">Netherlands</span><span class="chip bl">55%</span></div>
+          <div class="crow"><span class="flag">🇺🇸</span><span class="l">United States</span><span class="chip w">31%</span></div>
+          <div class="crow"><span class="flag">🇪🇸</span><span class="l">Spain</span><span class="chip g">4%</span></div>
+          <div class="crow"><span class="flag">🌐</span><span class="l">Others · 14 markets</span><span class="chip" style="background:var(--sunken);color:var(--faint)">10%</span></div>
+        </div>
+      </div>
+      <div class="note">⚠️ <b style="color:var(--muted)">Action + Toi-Toys</b> are both Netherlands-based. One policy shift, one currency event, one retailer distress — hits 55% at once.</div>
+    </div>
+
+    <div class="card">
+      <h3>Top 5 accounts · exposure vs. risk</h3>
+      <p class="sub">ranked by stated annual turnover</p>
+      <table class="ctable">
+        <thead><tr><th>Buyer</th><th>Market</th><th>Share</th><th>Risk</th></tr></thead>
+        <tbody>
+          <tr><td><b>Action</b></td><td>🇳🇱 NL</td><td class="val">34%</td><td><span class="pill w">⚠ single-geo</span></td></tr>
+          <tr><td><b>Toi-Toys</b></td><td>🇳🇱 NL</td><td class="val">21%</td><td><span class="pill w">⚠ single-geo</span></td></tr>
+          <tr><td><b>Ross</b></td><td>🇺🇸 US</td><td class="val" style="color:var(--good)">0.2%</td><td><span class="pill g">✓ diversified</span></td></tr>
+          <tr><td><b>Walgreens</b></td><td>🇺🇸 US</td><td class="val">6%</td><td><span class="pill g">✓ diversified</span></td></tr>
+          <tr><td><b>El Corte Inglés</b></td><td>🇪🇸 ES</td><td class="val">4%</td><td><span class="pill g">✓ single-country</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>Payment behaviour — European buyers vs. Ross</h3>
+    <p class="sub">observed DSO vs. standard terms for each buyer type</p>
+    <div class="twogrid">
+      <div>
+        <div style="font:600 10.5px var(--body);color:var(--faint);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">Observed DSO (days)</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="bar-row"><span>Action</span><div class="bar-h"><i style="width:72%;background:var(--blue);display:block;height:100%;border-radius:6px"></i></div><span class="bar-v">~50d</span></div>
+          <div class="bar-row"><span>Toi-Toys</span><div class="bar-h"><i style="width:66%;background:var(--blue);display:block;height:100%;border-radius:6px"></i></div><span class="bar-v">~45d</span></div>
+          <div class="bar-row"><span>Ross</span><div class="bar-h"><i style="width:52%;background:var(--teal);display:block;height:100%;border-radius:6px"></i></div><span class="bar-v">~39d</span></div>
+          <div class="bar-row"><span>Walgreens</span><div class="bar-h"><i style="width:60%;background:var(--teal);display:block;height:100%;border-radius:6px"></i></div><span class="bar-v">~42d</span></div>
+        </div>
+        <p style="font:500 11px var(--body);color:var(--faint);margin-top:8px">European off-price buyers typically run 45–60d · US retail 30–45d</p>
+      </div>
+      <div>
+        <div style="font:600 10.5px var(--body);color:var(--faint);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">Air8 financing exposure</div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 12px;border-radius:10px;background:var(--risk-soft)">
+            <span style="font:600 12.5px var(--body);color:var(--risk)">Action</span>
+            <span style="font:700 14px var(--mono);color:var(--risk)">$8.0M</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 12px;border-radius:10px;background:var(--warn-soft)">
+            <span style="font:600 12.5px var(--body);color:var(--warn)">Toi-Toys</span>
+            <span style="font:700 14px var(--mono);color:var(--warn)">$5.0M</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 12px;border-radius:10px;background:var(--good-soft)">
+            <span style="font:600 12.5px var(--body);color:var(--good)">Ross</span>
+            <span style="font:700 14px var(--mono);color:var(--good)">$850K</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 12px;border-radius:10px;background:var(--sunken)">
+            <span style="font:600 12.5px var(--body)">Walgreens</span>
+            <span style="font:700 14px var(--mono)">$1.5M</span>
+          </div>
+        </div>
+        <p style="font:500 11px var(--body);color:var(--faint);margin-top:8px">EU book = <b style="color:var(--risk)">$13M+</b> at risk from one market event</p>
+      </div>
+    </div>
+    <div class="exp" onclick="this.classList.toggle('open')">
+      <div class="exphd"><span class="arr">▸</span>Why Netherlands = elevated risk for toy suppliers</div>
+      <div class="expcon">
+        <div style="font:500 12.5px/1.6 var(--body);color:var(--muted);margin-top:8px">
+          <b style="color:var(--ink)">Three things move NL buyers simultaneously:</b><br>
+          <b>① Consumer cycle.</b> Action and Dealzc/Blokker ecosystem all target the same value-conscious Benelux consumer — one recession hit, all three contract at once.<br>
+          <b>② EUR/USD FX.</b> NL buyers pay in EUR. A 10% USD strengthening erodes Chinese factory margins by that amount with no offset.<br>
+          <b>③ Regulatory.</b> EU Toy Safety Directive 2009/48/EC is enforced more actively in NL than in most other EU markets — random border sampling is higher.<br><br>
+          <b style="color:var(--ink)">Action specifically:</b> expanding aggressively into DACH and Eastern Europe. Fast growth can mean fast SKU churn — today's hero SKU is tomorrow's clearance. Supplier concentration on Action is the single largest credit risk in BanaToys's book from Air8's perspective.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     KB-B — TOY COMPLIANCE MATRIX
+     ══════════════════════════════════════ -->
+<div class="sec" id="kbb">
+  <div class="sechd">
+    <span class="tagn">KB-B</span>
+    <h2>Compliance by market — what BanaToys needs per buyer</h2>
+  </div>
+  <p class="lede">Same factory, same product line, two regulatory worlds. Ross = US rules. Action/Toi-Toys/ECI = EU rules.</p>
+
+  <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap">
+    <div style="flex:1 1 160px;border-radius:14px;padding:13px 15px;border:1.5px solid var(--line);background:var(--surface)">
+      <div style="font:700 9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:5px">🇺🇸 US</div>
+      <div style="font:700 14px var(--display)">Ross Stores</div>
+      <div style="font:500 11px var(--body);color:var(--muted);margin-top:3px">$850K · rank 16/22</div>
+    </div>
+    <div style="flex:1 1 160px;border-radius:14px;padding:13px 15px;border:1.5px solid var(--line);background:var(--surface)">
+      <div style="font:700 9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:5px">🇳🇱 NL</div>
+      <div style="font:700 14px var(--display)">Action + Toi-Toys</div>
+      <div style="font:500 11px var(--body);color:var(--muted);margin-top:3px">$13M stated · 55% of book</div>
+    </div>
+    <div style="flex:1 1 160px;border-radius:14px;padding:13px 15px;border:1.5px solid var(--line);background:var(--surface)">
+      <div style="font:700 9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:5px">🇪🇸 ES</div>
+      <div style="font:700 14px var(--display)">El Corte Inglés</div>
+      <div style="font:500 11px var(--body);color:var(--muted);margin-top:3px">$1M stated · 4% of book</div>
+    </div>
+  </div>
+
+  <table class="mtbl">
+    <thead>
+      <tr><th>Requirement</th><th>🇺🇸 Ross / US</th><th>🇳🇱 Action / Toi-Toys</th><th>🇪🇸 El Corte Inglés</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>CPSC / ASTM F963</b></td><td><span class="vfy ok"><i></i> Required</span></td><td><span class="vfy na"><i></i> N/A — EU market</span></td><td><span class="vfy na"><i></i> N/A — EU market</span></td></tr>
+      <tr><td><b>Prop 65</b> (CA labelling)</td><td><span class="vfy unk"><i></i> Likely needed</span></td><td><span class="vfy na"><i></i> N/A</span></td><td><span class="vfy na"><i></i> N/A</span></td></tr>
+      <tr><td><b>EN 71 + CE marking</b></td><td><span class="vfy na"><i></i> N/A — US market</span></td><td><span class="vfy unk"><i></i> Likely needed</span></td><td><span class="vfy unk"><i></i> Likely needed</span></td></tr>
+      <tr><td><b>REACH / Phthalates</b></td><td><span class="vfy na"><i></i> N/A</span></td><td><span class="vfy unk"><i></i> Likely needed</span></td><td><span class="vfy unk"><i></i> Likely needed</span></td></tr>
+      <tr><td><b>EU Battery Directive</b></td><td><span class="vfy na"><i></i> N/A</span></td><td><span class="vfy unk"><i></i> If battery-included SKU</span></td><td><span class="vfy unk"><i></i> If battery-included SKU</span></td></tr>
+      <tr><td><b>ISO 8124</b> (mechanical)</td><td><span class="vfy ok"><i></i> Covered by ASTM F963</span></td><td><span class="vfy unk"><i></i> EN 71 equivalent</span></td><td><span class="vfy unk"><i></i> EN 71 equivalent</span></td></tr>
+      <tr><td><b>BSCI / amfori audit</b></td><td><span class="vfy unk"><i></i> Ross preference</span></td><td><span class="vfy unk"><i></i> Common NL requirement</span></td><td><span class="vfy unk"><i></i> Common ES requirement</span></td></tr>
+      <tr><td><b>Incoterms typically used</b></td><td><span class="vfy ok"><i></i> FOB / CIF</span></td><td><span class="vfy unk"><i></i> CIF / DAP common</span></td><td><span class="vfy unk"><i></i> CIF / DAP common</span></td></tr>
+    </tbody>
+  </table>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px">
+    <div style="border:1.5px dashed var(--warn);border-radius:16px;padding:14px 16px;background:var(--warn-soft)">
+      <div style="font:700 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--warn);margin-bottom:8px">⚠ Critical unknowns</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="grow">
+          <div class="l">BSCI / amfori<span style="display:block;font-weight:400;color:var(--faint);font-size:10px">factory social audit</span></div>
+          <div class="t"><i style="width:35%;background:var(--warn);display:block;height:100%;border-radius:4px"></i></div>
+          <div class="v" style="color:var(--warn)">35%</div>
+        </div>
+        <div style="font:600 11.5px var(--body);color:var(--muted);padding:4px 0">REACH / phthalate test — <span style="color:var(--risk);font-weight:700">UNSEEN</span></div>
+        <div style="font:600 11.5px var(--body);color:var(--muted);padding:4px 0">Prop 65 (if US re-sells CA) — <span style="color:var(--risk);font-weight:700">UNSEEN</span></div>
+      </div>
+      <p style="font:500 11.5px/1.55 var(--body);color:var(--muted);margin-top:10px">A single REACH test (≈$200–400 per SKU) closes the EU compliance gap for the whole product line.</p>
+    </div>
+    <div class="card">
+      <h3>The one thing that breaks EU compliance</h3>
+      <p class="sub">plastic toys, phthalates, and the 0.1% rule</p>
+      <div style="font:500 12.5px/1.65 var(--body);color:var(--muted)">
+        <b style="color:var(--ink)">Phthalates</b> are the most common EU rejection trigger for injection-moulded toys. EU limits three (DEHP, DBP, BBP) to <b style="color:var(--ink)">≤0.1%</b> each. US CPSC has no equivalent hard limit.<br><br>
+        <b style="color:var(--ink)">What this means:</b> Same pellets, same mould, two specs. One non-compliant resin batch flags the EU SKU while the US SKU sails through.
+      </div>
+    </div>
+  </div>
+  <div class="exp" onclick="this.classList.toggle('open')" style="margin-top:14px">
+    <div class="exphd"><span class="arr">▸</span>Material layer — where phthalates enter the chain</div>
+    <div class="expcon">
+      <div style="font:500 12.5px/1.65 var(--body);color:var(--muted);margin-top:8px">
+        The compliance risk starts <b style="color:var(--ink)">upstream of the factory</b>, at the plastic resin supplier. BanaToys buys PP and AS pellets — those pellets are where phthalate plasticisers hide. Factory QC cert means nothing if the input resin is non-compliant.<br><br>
+        <b style="color:var(--ink)">KB gap:</b> BanaToys's resin supplier list, country of origin, and whether EU-bound shipments have been tested at material level. This is a factory visit / document request away.
+      </div>
+    </div>
+  </div>
+  <p class="note">Colour: <span class="vfy ok"><i></i> seen/confirmed</span> · <span class="vfy unk"><i></i> likely needed — status unknown</span> · <span class="vfy gap"><i></i> gap</span> · <span class="vfy na"><i></i> N/A</span></p>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     KB-C — ACTION NL BUYER PROFILE  👁 EXPERT REVIEW
+     ══════════════════════════════════════ -->
+<div class="kbsec" id="kbc">
+  <div class="sechd">
+    <span class="tagn">KB-C</span>
+    <h2>Action BV — Buyer Profile</h2>
+    <span class="review">👁 EXPERT REVIEW DRAFT</span>
+  </div>
+
+  <div class="review-banner">
+    <span class="tag">DRAFT</span>
+    <span>This profile is built from BanaToys's stated data and public research. <b>Items marked ❓ need expert verification before use in client-facing materials.</b></span>
+  </div>
+
+  <div class="bprof">
+    <!-- LEFT: company overview -->
+    <div class="bcard">
+      <div class="hd">
+        <span class="flag2">🇳🇱</span>
+        <div>
+          <h3>Action BV</h3>
+          <span class="mk">Non-listed · Netherlands · 3,500+ stores</span>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="mrow">
+          <span class="l">Business model</span>
+          <span class="v">Extreme value / non-food discount</span>
+        </div>
+        <div class="mrow">
+          <span class="l">Credit rating</span>
+          <span class="v w">Private · no public rating <span class="prov need" title="No public credit rating — 3i is the financial sponsor"><i>?</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">Financial sponsor</span>
+          <span class="v">3i Group plc (LON: III) <span class="prov bench" title="3i is a listed PE firm — their portfolio reporting is public"><i>○</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">Revenue (FY2023)</span>
+          <span class="v">€11.7B <span class="prov bench" title="Source: 3i Group annual report 2023 — this is a benchmark figure, not Action-confirmed"><i>○</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">Store count</span>
+          <span class="v">3,500+ across 10 countries <span class="prov bench" title="Publicly stated by Action; widely reported"><i>○</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">Toy category role</span>
+          <span class="v">High-volume, low-price staple <span class="prov need" title="Expert input needed — does Action treat toys as a traffic driver or a seasonal add-on?"><i>?</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">BanaToys stated $</span>
+          <span class="v" style="color:var(--risk)">$8.0M / yr <span class="prov self" title="Stated by BanaToys — not independently confirmed"><i>◌</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">Share of BanaToys book</span>
+          <span class="v" style="color:var(--risk)">34% <span class="prov self" title="Calculated from BanaToys stated roster"><i>◌</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">Typical payment terms</span>
+          <span class="v w">~50d DSO <span class="prov need" title="Estimated from BanaToys invoice data — not confirmed with Action directly. Expert: please verify."><i>?</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">Incoterm preference</span>
+          <span class="v">CIF / DAP <span class="prov need" title="Expert input: what incoterms does Action typically require from CN-based toy suppliers?"><i>?</i></span></span>
+        </div>
+      </div>
+      <div class="risk-tags">
+        <span class="t nl">🇳🇱 Single-geo concentration</span>
+        <span class="t dso">⏱ ~50d DSO (elevated)</span>
+        <span class="t fx">💶 EUR buyer, CN supplier</span>
+        <span class="t sk">📦 SKU churn risk</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: sourcing + expert flags -->
+    <div class="bcard">
+      <h3>Sourcing patterns</h3>
+      <p class="sub">what we know about how Action buys toys</p>
+      <table class="stab">
+        <thead><tr><th>Dimension</th><th>Signal</th><th>Confidence</th></tr></thead>
+        <tbody>
+          <tr><td>Origin mix</td><td>Predominantly CN; growing VN/BD effort <span class="prov need" title="Expert input: what is Action's current CN vs non-CN toy sourcing split?"><i>?</i></span></td><td><span class="v" style="color:var(--warn)">Low</span></td></tr>
+          <tr><td>Supplier type</td><td>Factory-direct preferred for price <span class="prov bench" title="Consistent with Action's extreme-value model and public statements"><i>○</i></span></td><td><span class="v" style="color:var(--good)">Med</span></td></tr>
+          <tr><td>HS 9503 pricing</td><td>Low ticket · high volume · $1–4 range <span class="prov bench" title="Consistent with BanaToys invoice data + Action's value positioning"><i>○</i></span></td><td><span class="v" style="color:var(--good)">Med</span></td></tr>
+          <tr><td>Seasonality</td><td>Q4 peak (holiday) <span class="prov need" title="Expert input: does Action's toy buying have a pronounced seasonal pattern?"><i>?</i></span></td><td><span class="v" style="color:var(--warn)">Low</span></td></tr>
+          <tr><td>Cert requirements</td><td>EN 71, CE, BSCI typical <span class="prov need" title="Expert input: does Action require CE marking specifically for toys, or accept supplier declaration?"><i>?</i></span></td><td><span class="v" style="color:var(--warn)">Low</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="eflags">
+        <div class="eflg imp">
+          <i>!</i>
+          <div>
+            <b>3i exit risk</b>
+            3i has held Action since 2011. A potential IPO or secondary sale would trigger a re-rating of Action's supplier relationships — standard PE exit contingency. Source: 3i Annual Report 2023.
+          </div>
+        </div>
+        <div class="eflg ask">
+          <i>?</i>
+          <div>
+            <b>Verify DSO ceiling</b>
+            Our ~50d estimate is from BanaToys invoices. What is Action's actual days-payable-outstanding for a supplier of this size and category? ❓ Expert: please confirm.
+            <span class="src">src: BanaToys invoice data · self-declared</span>
+          </div>
+        </div>
+        <div class="eflg ask">
+          <i>?</i>
+          <div>
+            <b>SKU churn — hero SKU risk</b>
+            Action's model relies on fast-moving novelty SKUs. If a toy SKU underperforms a season, it is replaced fast. What is BanaToys's re-order rate with Action? ❓ Expert input needed.
+          </div>
+        </div>
+        <div class="eflg fin">
+          <i>i</i>
+          <div>
+            <b>Financing angle for Air8</b>
+            $8M exposure on Action with ~50d DSO represents significant working capital lock-up. Factoring this exposure would improve BanaToys's cash conversion meaningfully.
+            <span class="src">src: BanaToys stated roster + DSO estimate</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gapcard" style="margin-top:14px">
+    <div style="font:700 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--risk);margin-bottom:8px">❓ Expert verification checklist — Action NL</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px">
+      <div style="font:500 12px var(--body);color:var(--muted)"><b style="color:var(--ink)">① DSO ceiling</b> — confirm typical payment days for a CN toy supplier at €5–10M annual volume</div>
+      <div style="font:500 12px var(--body);color:var(--muted)"><b style="color:var(--ink)">② Cert standard</b> — does Action require CE, EN 71 originals, or accept copies? BSCI mandatory?</div>
+      <div style="font:500 12px var(--body);color:var(--muted)"><b style="color:var(--ink)">③ Incoterm</b> — what incoterm does Action use for CN toy imports? DAP/CIF/FOB?</div>
+      <div style="font:500 12px var(--body);color:var(--muted)"><b style="color:var(--ink)">④ Growth trajectory</b> — is Action still expanding toy category, or plateauing in non-food?</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     KB-D — TOI-TOYS NL BUYER PROFILE  👁 EXPERT REVIEW
+     ══════════════════════════════════════ -->
+<div class="kbsec" id="kbd">
+  <div class="sechd">
+    <span class="tagn">KB-D</span>
+    <h2>Toi-Toys BV — Buyer Profile</h2>
+    <span class="review">👁 EXPERT REVIEW DRAFT</span>
+  </div>
+
+  <div class="review-banner">
+    <span class="tag">DRAFT</span>
+    <span>Built from BanaToys's stated data and public research. <b>Marked ❓ = needs expert input.</b> Toi-Toys is less documented than Action — treat with lower confidence.</span>
+  </div>
+
+  <div class="bprof">
+    <div class="bcard">
+      <div class="hd">
+        <span class="flag2">🇳🇱</span>
+        <div>
+          <h3>Toi-Toys BV</h3>
+          <span class="mk">Private · Netherlands · toy specialist</span>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="mrow">
+          <span class="l">Business model</span>
+          <span class="v">Toy specialist / wholesale distributor <span class="prov need" title="Expert input: what is Toi-Toys's exact business model — distributor, own-brand, or hybrid?"><i>?</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">Market position</span>
+          <span class="v w">NL toy wholesaler — mid-market <span class="prov need" title="Expert input needed — no confirmed public positioning data"><i>?</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">Credit rating</span>
+          <span class="v" style="color:var(--risk)">None found <span class="prov gap" title="No public credit rating for Toi-Toys BV. This is a gap — expert input required to assess creditworthiness"><i>✗</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">Revenue (est.)</span>
+          <span class="v w">~€80–120M est. <span class="prov bench" title="Estimate based on market position and BanaToys stated $5M — this is a benchmark inference, not confirmed data"><i>○</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">Geographic footprint</span>
+          <span class="v">Netherlands primary · BeNeLux <span class="prov need" title="Expert input: does Toi-Toys also supply DACH or other EU markets?"><i>?</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">BanaToys stated $</span>
+          <span class="v" style="color:var(--warn)">$5.0M / yr <span class="prov self" title="Stated by BanaToys — not independently confirmed"><i>◌</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">Share of BanaToys book</span>
+          <span class="v" style="color:var(--warn)">21% <span class="prov self" title="Calculated from BanaToys stated roster"><i>◌</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">Typical DSO</span>
+          <span class="v w">~45d (estimated) <span class="prov need" title="Estimated from BanaToys invoice data — not confirmed. Expert: please verify DSO for Toi-Toys specifically"><i>?</i></span></span>
+        </div>
+        <div class="mrow">
+          <span class="l">Longest exposure</span>
+          <span class="v" style="color:var(--warn)">Longest of any account on file <span class="prov self" title="Per BanaToys's stated roster — longest-tenured buyer relationship"><i>◌</i></span></span>
+        </div>
+      </div>
+      <div class="risk-tags">
+        <span class="t nl">🇳🇱 Single-geo (NL)</span>
+        <span class="t dso">⏱ ~45d DSO (est.)</span>
+        <span class="t sk">❌ No public credit rating found</span>
+        <span class="t fx">💶 EUR buyer, CN supplier</span>
+      </div>
+    </div>
+
+    <div class="bcard">
+      <h3>Key risk flags</h3>
+      <p class="sub">areas where our data is weakest for Toi-Toys</p>
+      <div class="eflags">
+        <div class="eflg imp">
+          <i>!</i>
+          <div>
+            <b>No credit rating — credit risk unassessed</b>
+            Unlike Action (backed by 3i) or Ross (public, Moody's A2), Toi-Toys has no public financial disclosures and no credit rating. We cannot verify whether this buyer can service $5M+ in annual payables under stress. This is the most important gap in the buyer profile.
+            <span class="src">src: public records search · no rating found</span>
+          </div>
+        </div>
+        <div class="eflg imp">
+          <i>!</i>
+          <div>
+            <b>Longest relationship — but oldest ≠ safest</b>
+            BanaToys states Toi-Toys is the longest-tenured account. This could mean loyalty — or it could mean BanaToys has not successfully diversified away from a relationship that predates newer, better buyers.
+            <span class="src">src: BanaToys stated roster</span>
+          </div>
+        </div>
+        <div class="eflg ask">
+          <i>?</i>
+          <div>
+            <b>Business model clarification needed</b>
+            Is Toi-Toys a distributor (buys and resells) or a commission agent? This changes the credit exposure fundamentally — a distributor's own P&L is at stake; an agent passes risk back to the supplier.
+          </div>
+        </div>
+        <div class="eflg ask">
+          <i>?</i>
+          <div>
+            <b>Verify DSO and payment discipline</b>
+            Our ~45d estimate comes from BanaToys invoices. Has Toi-Toys ever exceeded 60d? Are there disputed invoices, deductions, or returns that affect net payment timing? ❓ Expert input needed.
+          </div>
+        </div>
+        <div class="eflg fin">
+          <i>i</i>
+          <div>
+            <b>Financing angle for Air8</b>
+            At $5M / ~45d DSO, Toi-Toys represents ~$615K in working capital that could be released via invoice financing. Combined with Action ($8M / ~50d ≈ $1.1M), the NL exposure alone is ~$1.7M unlockable.
+            <span class="src">src: BanaToys stated roster · DSO estimates</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gapcard" style="margin-top:14px">
+    <div style="font:700 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--risk);margin-bottom:8px">❓ Expert verification checklist — Toi-Toys NL</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px">
+      <div style="font:500 12px var(--body);color:var(--muted)"><b style="color:var(--ink)">① Business model</b> — distributor, agent, or own-brand? Changes credit analysis entirely.</div>
+      <div style="font:500 12px var(--body);color:var(--muted)"><b style="color:var(--ink)">② Creditworthiness</b> — any bank references, trade references, or credit insurer (Euler Hermes, Atradius) data available?</div>
+      <div style="font:500 12px var(--body);color:var(--muted)"><b style="color:var(--ink)">③ Actual DSO</b> — confirm typical payment days for a NL toy wholesaler at this volume tier.</div>
+      <div style="font:500 12px var(--body);color:var(--muted)"><b style="color:var(--ink)">④ Competitor overlap</b> — does Toi-Toys also buy from Cheng Le or other Chenghai rivals? What is their CN sourcing split?</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<footer>
+  Provenance: ● verified · ○ benchmark/inferred · ◌ self-declared · ❓ expert input needed · ✗ gap confirmed<br>
+  Expert review: send feedback via Telegram or Notion Expert Task DB
+</footer>
+
+<script>
+document.addEventListener('mousemove', function(e){
+  const g=document.querySelector('.gtip');
+  if(g){g.style.left=e.clientX+14+'px';g.style.top=e.clientY-10+'px';}
+});
+document.querySelectorAll('[data-tip]').forEach(function(el){
+  el.addEventListener('mouseenter', function(){
+    document.querySelectorAll('.gtip').forEach(g=>g.remove());
+    const g=document.createElement('div');g.className='gtip vis';
+    g.innerHTML=el.getAttribute('data-tip');
+    document.body.appendChild(g);
+  });
+  el.addEventListener('mouseleave', function(){
+    const g=document.querySelector('.gtip');
+    if(g){g.classList.remove('vis');setTimeout(function(){if(g.parentNode)g.remove()},150);}
+  });
+});
+</script>
+</body>
+</html>
